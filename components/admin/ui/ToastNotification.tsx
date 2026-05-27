@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import type { ToastItem } from "@/hooks/useToast";
 
 interface ToastNotificationProps {
@@ -9,29 +10,35 @@ interface ToastNotificationProps {
 
 export function ToastNotification({ items, onDismiss }: ToastNotificationProps) {
   return (
-    <div className="fixed bottom-5 right-5 z-[60] space-y-2">
-      {items.map((item) => (
-        <div
-          key={item.id}
-          className="w-72 rounded-xl border border-[#e8dcc3] bg-white p-3 shadow-lg"
-          role="status"
-          aria-live="polite"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-sm font-semibold text-[var(--brand-ink)]">{item.title}</p>
-              {item.description ? <p className="mt-1 text-xs text-[var(--brand-muted)]">{item.description}</p> : null}
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-[60] space-y-2 sm:right-5">
+      <AnimatePresence>
+        {items.map((item) => (
+          <motion.div
+            key={item.id}
+            className="w-72 rounded-xl border border-[#e8dcc3] bg-white p-3 shadow-lg"
+            role="status"
+            aria-live="polite"
+            initial={{ opacity: 0, y: 12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-[var(--brand-ink)]">{item.title}</p>
+                {item.description ? <p className="mt-1 text-xs text-[var(--brand-muted)]">{item.description}</p> : null}
+              </div>
+              <button
+                type="button"
+                onClick={() => onDismiss(item.id)}
+                className="rounded-md border border-[#ece1cf] px-2 py-1 text-xs hover:bg-[#f8f0df]"
+              >
+                Close
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => onDismiss(item.id)}
-              className="rounded-md border border-[#ece1cf] px-2 py-1 text-xs"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      ))}
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }

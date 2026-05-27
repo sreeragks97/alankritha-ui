@@ -16,13 +16,19 @@ export default function EditProductPage() {
 
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    void adminRepository.getCategories().then(setCategories);
-    void adminRepository.getProducts().then(setProducts);
+    void Promise.all([adminRepository.getCategories().then(setCategories), adminRepository.getProducts().then(setProducts)]).finally(() =>
+      setLoading(false),
+    );
   }, []);
 
   const product = useMemo(() => products.find((item) => item.id === params.id), [products, params.id]);
+
+  if (loading) {
+    return <div className="card-luxury h-[520px] animate-shimmer rounded-2xl" />;
+  }
 
   if (!product) {
     return (
@@ -38,7 +44,8 @@ export default function EditProductPage() {
   return (
     <div className="space-y-4">
       <div className="card-luxury rounded-2xl p-5">
-        <p className="font-heading text-3xl">Edit Product</p>
+        <p className="kicker">Catalog</p>
+        <p className="mt-1 font-heading text-3xl">Edit Product</p>
         <p className="mt-1 text-sm text-[var(--brand-muted)]">ID: {product.id}</p>
       </div>
       <ProductForm

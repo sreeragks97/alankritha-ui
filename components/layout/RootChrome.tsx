@@ -22,7 +22,7 @@ export function RootChrome({ children }: RootChromeProps) {
   return (
     <>
       <Navbar categories={categories} />
-      <main className="flex-1 pb-20 md:pb-8">{children}</main>
+      <main className="flex-1 pb-24 md:pb-10">{children}</main>
       <Footer />
       <WhatsAppFloatingButton />
     </>

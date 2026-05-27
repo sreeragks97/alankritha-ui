@@ -12,11 +12,14 @@ export default function AdminDashboardPage() {
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [leads, setLeads] = useState<WhatsAppLead[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    void adminRepository.getProducts().then(setProducts);
-    void adminRepository.getCategories().then(setCategories);
-    void adminRepository.getWhatsAppLeads().then(setLeads);
+    void Promise.all([
+      adminRepository.getProducts().then(setProducts),
+      adminRepository.getCategories().then(setCategories),
+      adminRepository.getWhatsAppLeads().then(setLeads),
+    ]).finally(() => setLoading(false));
   }, []);
 
   const recentProducts = useMemo(
@@ -25,6 +28,19 @@ export default function AdminDashboardPage() {
   );
 
   const featured = products.filter((product) => product.isFeatured).length;
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="card-luxury h-28 animate-shimmer" />
+          ))}
+        </div>
+        <div className="card-luxury h-72 animate-shimmer" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -39,7 +55,7 @@ export default function AdminDashboardPage() {
         <article className="card-luxury rounded-2xl p-5 xl:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <p className="font-heading text-3xl">Recent Activity</p>
-            <Link href="/admin/products" className="text-sm font-semibold text-[var(--brand-gold-deep)]">
+            <Link href="/admin/products" className="gold-link rounded-full border border-[#d9cbaf] px-3 py-1.5 text-sm font-semibold">
               View all products
             </Link>
           </div>
@@ -52,6 +68,7 @@ export default function AdminDashboardPage() {
             ]}
             rows={recentProducts}
             rowKey={(row) => row.id}
+            caption="Recent product activity"
           />
         </article>
 
@@ -59,13 +76,16 @@ export default function AdminDashboardPage() {
           <article className="card-luxury rounded-2xl p-5">
             <p className="font-heading text-2xl">Quick Actions</p>
             <div className="mt-4 grid gap-2">
-              <Link href="/admin/products/new" className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white">
+              <Link
+                href="/admin/products/new"
+                className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+              >
                 Add Product
               </Link>
-              <Link href="/admin/categories" className="rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold">
+              <Link href="/admin/categories" className="rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold hover:bg-[#f7f0df]">
                 Manage Categories
               </Link>
-              <Link href="/admin/banners" className="rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold">
+              <Link href="/admin/banners" className="rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold hover:bg-[#f7f0df]">
                 Update Banners
               </Link>
             </div>

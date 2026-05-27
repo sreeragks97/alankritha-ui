@@ -10,14 +10,27 @@ import type { LeadStatus, WhatsAppLead } from "@/types/admin";
 
 export default function WhatsAppLeadsPage() {
   const [leads, setLeads] = useState<WhatsAppLead[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<"all" | LeadStatus>("all");
 
   useEffect(() => {
-    void adminRepository.getWhatsAppLeads().then(setLeads);
+    void adminRepository
+      .getWhatsAppLeads()
+      .then(setLeads)
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() => queryLeads(leads, search, status), [leads, search, status]);
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="card-luxury h-20 animate-shimmer rounded-2xl" />
+        <div className="card-luxury h-80 animate-shimmer rounded-2xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -27,7 +40,7 @@ export default function WhatsAppLeadsPage() {
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value as "all" | LeadStatus)}
-            className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm"
+            className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
           >
             <option value="all">All Statuses</option>
             <option value="new">New</option>
@@ -49,6 +62,7 @@ export default function WhatsAppLeadsPage() {
           ]}
           rows={filtered}
           rowKey={(row) => row.id}
+          caption="WhatsApp leads list"
         />
       </section>
     </div>

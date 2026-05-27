@@ -12,6 +12,7 @@ import type { AdminCategory } from "@/types/admin";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<AdminCategory | null>(null);
@@ -20,7 +21,10 @@ export default function CategoriesPage() {
   const [slug, setSlug] = useState("");
 
   useEffect(() => {
-    void adminRepository.getCategories().then(setCategories);
+    void adminRepository
+      .getCategories()
+      .then(setCategories)
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() => {
@@ -76,12 +80,25 @@ export default function CategoriesPage() {
     setModalOpen(false);
   };
 
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="card-luxury h-20 animate-shimmer rounded-2xl" />
+        <div className="card-luxury h-80 animate-shimmer rounded-2xl" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <section className="card-luxury rounded-2xl p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <SearchBar value={search} onChange={setSearch} placeholder="Search categories" />
-          <button type="button" onClick={openAdd} className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white">
+          <button
+            type="button"
+            onClick={openAdd}
+            className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+          >
             Add Category
           </button>
         </div>
@@ -106,7 +123,7 @@ export default function CategoriesPage() {
               title: "Actions",
               render: (item) => (
                 <div className="flex gap-2">
-                  <button type="button" className="rounded-md border border-[#e8dcc3] px-2 py-1 text-xs" onClick={() => openEdit(item)}>
+                  <button type="button" className="rounded-md border border-[#e8dcc3] px-2 py-1 text-xs hover:bg-[#f8f0df]" onClick={() => openEdit(item)}>
                     Edit
                   </button>
                   <button
@@ -122,6 +139,7 @@ export default function CategoriesPage() {
           ]}
           rows={filtered}
           rowKey={(row) => row.id}
+          caption="Admin categories list"
         />
       </section>
 
@@ -134,7 +152,11 @@ export default function CategoriesPage() {
             <button type="button" className="rounded-lg border border-[#e8dcc3] px-3 py-2 text-sm" onClick={() => setModalOpen(false)}>
               Cancel
             </button>
-            <button type="button" onClick={save} className="rounded-lg bg-[var(--brand-gold)] px-3 py-2 text-sm font-semibold text-white">
+            <button
+              type="button"
+              onClick={save}
+              className="rounded-lg bg-[var(--brand-gold)] px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--brand-gold-deep)]"
+            >
               Save
             </button>
           </div>
@@ -143,14 +165,18 @@ export default function CategoriesPage() {
         <div className="space-y-4">
           <label className="block space-y-2 text-sm">
             <span>Name</span>
-            <input value={name} onChange={(event) => setName(event.target.value)} className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2" />
+            <input
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+            />
           </label>
           <label className="block space-y-2 text-sm">
             <span>Slug</span>
             <input
               value={slug}
               onChange={(event) => setSlug(toSlug(event.target.value))}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2"
+              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
         </div>

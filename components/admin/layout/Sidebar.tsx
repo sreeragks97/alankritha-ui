@@ -23,13 +23,18 @@ export function Sidebar({ compact, onNavigate }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className={cn("h-full bg-[var(--brand-card)]", compact ? "w-full" : "w-72 border-r border-[#e8dcc3]")}>
+    <aside
+      className={cn(
+        "h-full bg-[linear-gradient(180deg,#fffefb_0%,#fdf8ed_100%)]",
+        compact ? "w-full" : "w-72 border-r border-[#e8dcc3]",
+      )}
+    >
       <div className="border-b border-[#e8dcc3] px-6 py-5">
-        <p className="font-heading text-2xl text-[var(--brand-ink)]">Alankritha Admin</p>
+        <p className="font-heading text-2xl tracking-[0.03em] text-[var(--brand-ink)]">Alankritha Admin</p>
         <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[var(--brand-muted)]">Jewellery Catalog Desk</p>
       </div>
 
-      <nav className="space-y-1 p-4">
+      <nav className="space-y-1.5 p-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
@@ -40,7 +45,7 @@ export function Sidebar({ compact, onNavigate }: SidebarProps) {
               className={cn(
                 "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition",
                 isActive
-                  ? "bg-[#efe3cb] text-[var(--brand-ink)] shadow-sm"
+                  ? "bg-[#efe3cb] text-[var(--brand-ink)] shadow-[0_10px_22px_rgba(55,44,26,0.12)]"
                   : "text-[var(--brand-muted)] hover:bg-[#f8f3e8] hover:text-[var(--brand-ink)]",
               )}
             >

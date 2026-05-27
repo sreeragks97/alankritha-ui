@@ -14,6 +14,7 @@ import type { AdminCategory, AdminProduct, ProductStatus } from "@/types/admin";
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState<"all" | ProductStatus>("all");
@@ -21,8 +22,9 @@ export default function AdminProductsPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   useEffect(() => {
-    void adminRepository.getProducts().then(setProducts);
-    void adminRepository.getCategories().then(setCategories);
+    void Promise.all([adminRepository.getProducts().then(setProducts), adminRepository.getCategories().then(setCategories)]).finally(() =>
+      setLoading(false),
+    );
   }, []);
 
   const result = useMemo(
@@ -48,6 +50,15 @@ export default function AdminProductsPage() {
   const toggleOne = (id: string) => {
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="card-luxury h-20 animate-shimmer rounded-2xl" />
+        <div className="card-luxury h-80 animate-shimmer rounded-2xl" />
+      </div>
+    );
+  }
 
   if (products.length === 0) {
     return (
@@ -80,7 +91,7 @@ export default function AdminProductsPage() {
                 setPage(1);
                 setSelectedIds([]);
               }}
-              className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             >
               <option value="all">All Categories</option>
               {categories.map((item) => (
@@ -96,7 +107,7 @@ export default function AdminProductsPage() {
                 setPage(1);
                 setSelectedIds([]);
               }}
-              className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             >
               <option value="all">All Statuses</option>
               <option value="active">Active</option>
@@ -105,7 +116,10 @@ export default function AdminProductsPage() {
             </select>
           </div>
 
-          <Link href="/admin/products/new" className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white">
+          <Link
+            href="/admin/products/new"
+            className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+          >
             Add Product
           </Link>
         </div>
@@ -127,7 +141,12 @@ export default function AdminProductsPage() {
               key: "select",
               title: "Select",
               render: (item) => (
-                <input type="checkbox" checked={selectedIds.includes(item.id)} onChange={() => toggleOne(item.id)} />
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(item.id)}
+                  onChange={() => toggleOne(item.id)}
+                  aria-label={`Select ${item.name}`}
+                />
               ),
             },
             {
@@ -155,7 +174,7 @@ export default function AdminProductsPage() {
               key: "actions",
               title: "Actions",
               render: (item) => (
-                <select className="rounded-lg border border-[#e8dcc3] bg-white px-2 py-1 text-xs" defaultValue="">
+                <select className="rounded-lg border border-[#e8dcc3] bg-white px-2 py-1 text-xs focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]" defaultValue="">
                   <option value="" disabled>
                     Choose
                   </option>
@@ -169,6 +188,7 @@ export default function AdminProductsPage() {
           ]}
           rows={result.items}
           rowKey={(row) => row.id}
+          caption="Admin products list"
         />
         <Pagination
           page={result.page}

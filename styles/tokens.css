@@ -4,11 +4,28 @@
   --brand-sand: #e7dfcf;
   --brand-gold: #b08b46;
   --brand-gold-deep: #8f6f35;
+  --brand-gold-soft: #cfb57d;
   --brand-ink: #1d1a16;
   --brand-muted: #6f6659;
   --brand-card: #fffdf9;
+  --brand-stone: #cfc2a9;
 
   --radius-soft: 1rem;
+  --radius-card: 1.25rem;
   --radius-pill: 9999px;
   --shadow-soft: 0 10px 30px rgba(29, 26, 22, 0.08);
+  --shadow-card: 0 16px 36px rgba(35, 31, 24, 0.1);
+  --shadow-hover: 0 22px 48px rgba(35, 31, 24, 0.14);
+
+  --space-section-y: clamp(3.5rem, 6vw, 6rem);
+  --space-section-y-tight: clamp(2.5rem, 4vw, 4rem);
+
+  --text-hero: clamp(2rem, 5vw, 4rem);
+  --text-title: clamp(1.35rem, 2.2vw, 2.15rem);
+  --text-body: clamp(0.975rem, 1.2vw, 1.05rem);
+
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-base: 260ms;
+  --duration-slow: 420ms;
 }

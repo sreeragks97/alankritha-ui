@@ -48,7 +48,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const result = paginate(filtered, page, PAGE_SIZE);
 
   return (
-    <div className="container-shell py-8 sm:py-10">
+    <div className="container-shell py-8 sm:py-10 md:py-12">
       <SectionHeader title={category.name} subtitle={category.description} />
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
         <FilterSidebar categories={categories} products={products} />
@@ -60,7 +60,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
               ))}
             </div>
           ) : (
-            <div className="card-luxury p-8 text-center text-[var(--brand-muted)]">No products found for the selected filters.</div>
+            <div className="card-luxury p-8 text-center text-[var(--brand-muted)] sm:p-10">No products found for the selected filters.</div>
           )}
           <Pagination
             meta={result.meta}

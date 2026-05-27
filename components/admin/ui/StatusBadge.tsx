@@ -10,7 +10,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em]",
+        "inline-flex rounded-full px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.13em]",
         tone === "active" || tone === "new"
           ? "bg-[#e8f8ee] text-[#1d7f4a]"
           : tone === "contacted" || tone === "quoted"

@@ -112,7 +112,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
         submit("publish");
       }}
     >
-      <section className="card-luxury rounded-2xl p-5">
+      <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">1. Basic Information</p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="space-y-2 text-sm">
@@ -120,7 +120,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
             <input
               value={form.name}
               onChange={(event) => updateName(event.target.value)}
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
             {errors.name ? <span className="text-xs text-[#9d3f2d]">{errors.name}</span> : null}
           </label>
@@ -130,7 +130,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
             <input
               value={form.code}
               onChange={(event) => setField("code", event.target.value)}
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
             {errors.code ? <span className="text-xs text-[#9d3f2d]">{errors.code}</span> : null}
           </label>
@@ -140,7 +140,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
             <input
               value={form.slug}
               onChange={(event) => setField("slug", toSlug(event.target.value))}
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
             {errors.slug ? <span className="text-xs text-[#9d3f2d]">{errors.slug}</span> : null}
           </label>
@@ -151,13 +151,13 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
               rows={4}
               value={form.description}
               onChange={(event) => setField("description", event.target.value)}
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
         </div>
       </section>
 
-      <section className="card-luxury rounded-2xl p-5">
+      <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">2. Pricing</p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="space-y-2 text-sm">
@@ -166,7 +166,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
               type="number"
               value={form.price}
               onChange={(event) => setField("price", Number(event.target.value))}
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
             {errors.price ? <span className="text-xs text-[#9d3f2d]">{errors.price}</span> : null}
           </label>
@@ -176,13 +176,13 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
               type="number"
               value={form.offerPrice ?? 0}
               onChange={(event) => setField("offerPrice", Number(event.target.value))}
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
         </div>
       </section>
 
-      <section className="card-luxury rounded-2xl p-5">
+      <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">3. Category and Tags</p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="space-y-2 text-sm">
@@ -190,7 +190,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
             <select
               value={form.categoryId}
               onChange={(event) => updateCategory(event.target.value)}
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             >
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -205,20 +205,20 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
               value={tagInput}
               onChange={(event) => setTagInput(event.target.value)}
               placeholder="bridal, temple, lightweight"
-              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
         </div>
       </section>
 
-      <section className="card-luxury rounded-2xl p-5">
+      <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">4. Product Images</p>
         <div className="mt-4">
           <ImageUploader images={form.images} onChange={(images) => setField("images", images)} />
         </div>
       </section>
 
-      <section className="card-luxury rounded-2xl p-5">
+      <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">5. Product Status</p>
         <div className="mt-4 flex flex-wrap gap-3 text-sm">
           <label className="inline-flex items-center gap-2 rounded-lg border border-[#e6d8bc] px-3 py-2">
@@ -248,21 +248,21 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
         </div>
       </section>
 
-      <section className="card-luxury rounded-2xl p-5">
+      <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">6. SEO Preview</p>
         <div className="mt-4 grid gap-4">
           <input
             value={metaTitle}
             onChange={(event) => setMetaTitle(event.target.value)}
             placeholder="Meta title"
-            className="rounded-xl border border-[#e6d8bc] px-3 py-2"
+            className="rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
           />
           <textarea
             rows={3}
             value={metaDescription}
             onChange={(event) => setMetaDescription(event.target.value)}
             placeholder="Meta description"
-            className="rounded-xl border border-[#e6d8bc] px-3 py-2"
+            className="rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
           />
           <div className="rounded-xl border border-[#ece1cd] bg-[#fffbf3] p-3 text-sm">
             <p className="font-semibold text-[var(--brand-gold-deep)]">alankritha.in/products/{form.slug || "product-slug"}</p>
@@ -272,27 +272,30 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
         </div>
       </section>
 
-      <section className="card-luxury rounded-2xl p-5">
+      <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">7. WhatsApp Preview</p>
         <div className="mt-4 rounded-xl border border-[#e7d9bc] bg-[#f5fffa] p-3 text-sm text-[#1b5f42]">{whatsappPreview}</div>
       </section>
 
-      <div className="sticky bottom-3 z-10 flex flex-wrap justify-end gap-2 rounded-xl border border-[#e8dcc3] bg-[#fffaf2] p-3">
+      <div className="sticky bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-10 flex flex-wrap justify-end gap-2 rounded-xl border border-[#e8dcc3] bg-[#fffaf2]/95 p-3 backdrop-blur-sm">
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-[#e6d8bc] px-4 py-2 text-sm"
+          className="rounded-lg border border-[#e6d8bc] px-4 py-2 text-sm hover:bg-[#f8f0df]"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={() => submit("draft")}
-          className="rounded-lg border border-[#dcc39d] px-4 py-2 text-sm font-semibold"
+          className="rounded-lg border border-[#dcc39d] px-4 py-2 text-sm font-semibold hover:bg-[#f8f0df]"
         >
           Save Draft
         </button>
-        <button type="submit" className="rounded-lg bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white">
+        <button
+          type="submit"
+          className="rounded-lg bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+        >
           {mode === "create" ? "Publish" : "Update"}
         </button>
       </div>

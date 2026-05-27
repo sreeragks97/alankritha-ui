@@ -12,8 +12,8 @@ export default function Home() {
     .slice(0, 4);
 
   return (
-    <div className="container-shell space-y-14 py-8 sm:py-10">
-      <section className="animate-fade-up">
+    <div className="container-shell space-y-14 py-8 sm:space-y-16 sm:py-10 md:space-y-20">
+      <section className="animate-fade-up section-shell-tight">
         <Banner
           title={banners[0].title}
           subtitle={banners[0].subtitle}
@@ -23,7 +23,7 @@ export default function Home() {
         />
       </section>
 
-      <section>
+      <section className="section-shell-tight">
         <SectionHeader
           title="Shop By Category"
           subtitle="Curated pieces for bridal rituals, celebrations, and everyday elegance."
@@ -35,7 +35,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section>
+      <section className="section-shell-tight">
         <SectionHeader
           title="Featured Collection"
           subtitle="Our most loved heritage-inspired selections."
@@ -49,7 +49,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section>
+      <section className="section-shell-tight">
         <SectionHeader title="New Arrivals" subtitle="Freshly curated pieces for the season." />
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {newArrivals.map((product) => (
@@ -58,7 +58,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section>
+      <section className="section-shell-tight">
         <Banner
           title={banners[1].title}
           subtitle={banners[1].subtitle}
@@ -68,7 +68,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="card-luxury p-6 sm:p-8">
+      <section className="card-luxury section-shell-tight px-6 py-8 sm:px-8">
         <SectionHeader
           title="Instagram Reels Preview"
           subtitle="Daily styling moments and bridal inspirations from our studio."
@@ -88,15 +88,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="card-luxury flex flex-col items-center gap-4 p-8 text-center">
-        <p className="font-heading text-3xl sm:text-4xl">Need a custom bridal recommendation?</p>
-        <p className="max-w-2xl text-sm text-[var(--brand-muted)] sm:text-base">
+      <section className="card-luxury flex flex-col items-center gap-4 p-8 text-center sm:p-10">
+        <p className="font-heading text-3xl leading-tight sm:text-4xl">Need a custom bridal recommendation?</p>
+        <p className="max-w-2xl text-sm leading-7 text-[var(--brand-muted)] sm:text-base">
           Share your wedding style, saree palette, and budget on WhatsApp. Our team will suggest curated sets.
         </p>
         <Link
           href="https://wa.me/919876543210"
           target="_blank"
-          className="rounded-full bg-[var(--brand-gold)] px-6 py-3 text-sm font-semibold text-white"
+          className="rounded-full bg-[var(--brand-gold)] px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(176,139,70,0.28)] hover:bg-[var(--brand-gold-deep)]"
         >
           Enquire on WhatsApp
         </Link>

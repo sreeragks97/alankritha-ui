@@ -12,9 +12,13 @@ export default function NewProductPage() {
   const router = useRouter();
   const { toasts, showToast, removeToast } = useToast();
   const [categories, setCategories] = useState<AdminCategory[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    void adminRepository.getCategories().then(setCategories);
+    void adminRepository
+      .getCategories()
+      .then(setCategories)
+      .finally(() => setLoading(false));
   }, []);
 
   const handleSubmit = (payload: AdminProduct, action: "draft" | "publish") => {
@@ -31,10 +35,12 @@ export default function NewProductPage() {
   return (
     <div className="space-y-4">
       <div className="card-luxury rounded-2xl p-5">
-        <p className="font-heading text-3xl">Add Product</p>
+        <p className="kicker">Catalog</p>
+        <p className="mt-1 font-heading text-3xl">Add Product</p>
         <p className="mt-1 text-sm text-[var(--brand-muted)]">Create premium catalogue entries with media, SEO, and WhatsApp preview.</p>
       </div>
-      <ProductForm mode="create" categories={categories} onSubmit={handleSubmit} onCancel={() => router.push("/admin/products")} />
+      {loading ? <div className="card-luxury h-[520px] animate-shimmer rounded-2xl" /> : null}
+      {!loading ? <ProductForm mode="create" categories={categories} onSubmit={handleSubmit} onCancel={() => router.push("/admin/products")} /> : null}
       <ToastNotification items={toasts} onDismiss={removeToast} />
     </div>
   );

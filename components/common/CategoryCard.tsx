@@ -9,17 +9,17 @@ export function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={`/category/${category.slug}`}
-      className="card-luxury group block overflow-hidden transition-transform duration-300 hover:-translate-y-1"
+      className="card-luxury group block overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)]"
     >
       <div
-        className="h-40 w-full bg-cover bg-center"
+        className="h-44 w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.04]"
         style={{
-          backgroundImage: `linear-gradient(to top, rgba(23, 17, 10, 0.45), rgba(23, 17, 10, 0.1)), url(${category.image})`,
+          backgroundImage: `linear-gradient(to top, rgba(23, 17, 10, 0.5), rgba(23, 17, 10, 0.1)), url(${category.image})`,
         }}
       />
-      <div className="p-4">
-        <h3 className="font-heading text-xl text-[var(--brand-ink)]">{category.name}</h3>
-        <p className="mt-1 text-sm text-[var(--brand-muted)]">{category.description}</p>
+      <div className="p-4 sm:p-4.5">
+        <h3 className="font-heading text-[1.35rem] text-[var(--brand-ink)]">{category.name}</h3>
+        <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-[var(--brand-muted)]">{category.description}</p>
       </div>
     </Link>
   );
