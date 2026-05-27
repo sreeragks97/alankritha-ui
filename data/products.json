@@ -1,0 +1,225 @@
+[
+  {
+    "id": "prod-tn101",
+    "slug": "temple-necklace-101",
+    "name": "Antique Temple Necklace",
+    "code": "TN101",
+    "category": "necklaces",
+    "price": 850,
+    "images": [
+      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1588444837495-c6cfeb53cb40?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "A handcrafted temple necklace with antique finish and sculpted motifs inspired by traditional Kerala bridal jewellery.",
+    "tags": ["antique", "temple", "bridal"],
+    "metalType": "gold",
+    "occasion": "bridal",
+    "isFeatured": true,
+    "isNew": true,
+    "createdAt": "2026-02-14"
+  },
+  {
+    "id": "prod-tn118",
+    "slug": "kasu-mala-118",
+    "name": "Kasu Mala Heritage Chain",
+    "code": "TN118",
+    "category": "necklaces",
+    "price": 690,
+    "images": [
+      "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Coin-inspired kasu mala with polished links and ceremonial character for festive styling.",
+    "tags": ["kasu", "heritage", "festive"],
+    "metalType": "gold",
+    "occasion": "festive",
+    "isFeatured": true,
+    "isNew": false,
+    "createdAt": "2025-11-05"
+  },
+  {
+    "id": "prod-er205",
+    "slug": "kundan-chandbali-205",
+    "name": "Kundan Chandbali Earrings",
+    "code": "ER205",
+    "category": "earrings",
+    "price": 340,
+    "images": [
+      "https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Statement chandbalis with kundan highlights and soft movement for wedding and festive nights.",
+    "tags": ["kundan", "chandbali", "statement"],
+    "metalType": "gold",
+    "occasion": "festive",
+    "isFeatured": false,
+    "isNew": true,
+    "createdAt": "2026-03-08"
+  },
+  {
+    "id": "prod-er231",
+    "slug": "lotus-stud-231",
+    "name": "Lotus Petal Studs",
+    "code": "ER231",
+    "category": "earrings",
+    "price": 180,
+    "images": [
+      "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Compact lotus-inspired studs that pair effortlessly with sarees and modern silhouettes.",
+    "tags": ["stud", "dailywear", "lotus"],
+    "metalType": "gold",
+    "occasion": "daily",
+    "isFeatured": false,
+    "isNew": true,
+    "createdAt": "2026-04-12"
+  },
+  {
+    "id": "prod-bg301",
+    "slug": "vanki-bangle-301",
+    "name": "Vanki Texture Bangles",
+    "code": "BG301",
+    "category": "bangles",
+    "price": 420,
+    "images": [
+      "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Sculpted vanki bangles with textured detailing for stacked bridal looks.",
+    "tags": ["vanki", "stack", "bridal"],
+    "metalType": "gold",
+    "occasion": "bridal",
+    "isFeatured": true,
+    "isNew": false,
+    "createdAt": "2025-12-20"
+  },
+  {
+    "id": "prod-bg329",
+    "slug": "minimal-cuff-329",
+    "name": "Minimal Gold Cuff",
+    "code": "BG329",
+    "category": "bangles",
+    "price": 210,
+    "images": [
+      "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "A smooth modern cuff designed for everyday elegance.",
+    "tags": ["minimal", "dailywear"],
+    "metalType": "gold",
+    "occasion": "daily",
+    "isFeatured": false,
+    "isNew": false,
+    "createdAt": "2025-08-01"
+  },
+  {
+    "id": "prod-rg402",
+    "slug": "navaratna-ring-402",
+    "name": "Navaratna Halo Ring",
+    "code": "RG402",
+    "category": "rings",
+    "price": 260,
+    "images": [
+      "https://images.unsplash.com/photo-1602752250015-52934bc45613?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Nine-stone inspired ring with a halo profile for festive gifting.",
+    "tags": ["navaratna", "gift", "festive"],
+    "metalType": "gold",
+    "occasion": "festive",
+    "isFeatured": false,
+    "isNew": true,
+    "createdAt": "2026-01-19"
+  },
+  {
+    "id": "prod-rg419",
+    "slug": "silver-vine-ring-419",
+    "name": "Silver Vine Ring",
+    "code": "RG419",
+    "category": "rings",
+    "price": 140,
+    "images": [
+      "https://images.unsplash.com/photo-1615655096345-61a54750068b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Fine vine motifs in polished silver for subtle daily styling.",
+    "tags": ["silver", "dailywear"],
+    "metalType": "silver",
+    "occasion": "daily",
+    "isFeatured": false,
+    "isNew": false,
+    "createdAt": "2025-05-04"
+  },
+  {
+    "id": "prod-bs501",
+    "slug": "kerala-bridal-set-501",
+    "name": "Kerala Bridal Grand Set",
+    "code": "BS501",
+    "category": "bridal-sets",
+    "price": 1450,
+    "images": [
+      "https://images.unsplash.com/photo-1588444837495-c6cfeb53cb40?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "A complete bridal set with layered necklace, earrings, and bangles for a regal wedding day presence.",
+    "tags": ["bridal", "set", "kerala"],
+    "metalType": "gold",
+    "occasion": "bridal",
+    "isFeatured": true,
+    "isNew": true,
+    "createdAt": "2026-02-01"
+  },
+  {
+    "id": "prod-bs528",
+    "slug": "muhurtham-set-528",
+    "name": "Muhurtham Ceremony Set",
+    "code": "BS528",
+    "category": "bridal-sets",
+    "price": 1320,
+    "images": [
+      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Temple artistry and layered drape designed for muhurtham rituals.",
+    "tags": ["muhurtham", "temple", "bridal"],
+    "metalType": "gold",
+    "occasion": "bridal",
+    "isFeatured": true,
+    "isNew": false,
+    "createdAt": "2025-10-09"
+  },
+  {
+    "id": "prod-tn133",
+    "slug": "pearl-layered-necklace-133",
+    "name": "Pearl Layered Necklace",
+    "code": "TN133",
+    "category": "necklaces",
+    "price": 520,
+    "images": [
+      "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Soft pearl layers balanced with warm gold for pre-wedding events.",
+    "tags": ["pearl", "layered", "bridal"],
+    "metalType": "gold",
+    "occasion": "festive",
+    "isFeatured": false,
+    "isNew": true,
+    "createdAt": "2026-04-02"
+  },
+  {
+    "id": "prod-er244",
+    "slug": "silver-drop-earrings-244",
+    "name": "Silver Drop Earrings",
+    "code": "ER244",
+    "category": "earrings",
+    "price": 125,
+    "images": [
+      "https://images.unsplash.com/photo-1615655096345-61a54750068b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "description": "Lightweight silver drops with mirror polish and fluid movement.",
+    "tags": ["silver", "minimal", "dailywear"],
+    "metalType": "silver",
+    "occasion": "daily",
+    "isFeatured": false,
+    "isNew": false,
+    "createdAt": "2025-06-18"
+  }
+]

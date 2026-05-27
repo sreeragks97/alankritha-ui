@@ -1,0 +1,55 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/motion.css";
+
+@theme inline {
+  --color-background: var(--brand-ivory);
+  --color-foreground: var(--brand-ink);
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-heading);
+  --font-mono: "JetBrains Mono", "Consolas", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #fefbf3 0%, var(--brand-ivory) 60%);
+  color: var(--brand-ink);
+  font-family: var(--font-body), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container-shell {
+  width: min(1200px, 92vw);
+  margin-inline: auto;
+}
+
+.card-luxury {
+  background: var(--brand-card);
+  border: 1px solid color-mix(in srgb, var(--brand-gold) 18%, #fff 82%);
+  border-radius: var(--radius-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+.gold-link {
+  color: var(--brand-gold-deep);
+  transition: color 200ms ease;
+}
+
+.gold-link:hover {
+  color: var(--brand-gold);
+}
+
+.gradient-text {
+  background: linear-gradient(120deg, #6d5425, #bf9f58 45%, #7d642f 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

@@ -1,0 +1,14 @@
+:root {
+  --brand-ivory: #f9f6ef;
+  --brand-cream: #f5f1e8;
+  --brand-sand: #e7dfcf;
+  --brand-gold: #b08b46;
+  --brand-gold-deep: #8f6f35;
+  --brand-ink: #1d1a16;
+  --brand-muted: #6f6659;
+  --brand-card: #fffdf9;
+
+  --radius-soft: 1rem;
+  --radius-pill: 9999px;
+  --shadow-soft: 0 10px 30px rgba(29, 26, 22, 0.08);
+}
