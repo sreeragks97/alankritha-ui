@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cat_necklaces",
+    "name": "Necklaces",
+    "slug": "necklaces",
+    "bannerImage": "/images/admin/category-necklaces.jpg",
+    "productCount": 42,
+    "status": "active"
+  },
+  {
+    "id": "cat_chokers",
+    "name": "Chokers",
+    "slug": "chokers",
+    "bannerImage": "/images/admin/category-chokers.jpg",
+    "productCount": 19,
+    "status": "active"
+  },
+  {
+    "id": "cat_bangles",
+    "name": "Bangles",
+    "slug": "bangles",
+    "bannerImage": "/images/admin/category-bangles.jpg",
+    "productCount": 31,
+    "status": "active"
+  },
+  {
+    "id": "cat_earrings",
+    "name": "Earrings",
+    "slug": "earrings",
+    "bannerImage": "/images/admin/category-earrings.jpg",
+    "productCount": 24,
+    "status": "inactive"
+  },
+  {
+    "id": "cat_waistbelts",
+    "name": "Waist Belts",
+    "slug": "waist-belts",
+    "bannerImage": "/images/admin/category-waistbelts.jpg",
+    "productCount": 8,
+    "status": "active"
+  }
+]

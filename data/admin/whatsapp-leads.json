@@ -1,0 +1,34 @@
+[
+  {
+    "id": "lead_001",
+    "customerName": "Maya Nair",
+    "productName": "Temple Lakshmi Long Necklace",
+    "productCode": "ALK-TEMP-001",
+    "inquiryDate": "2026-05-26T09:10:00.000Z",
+    "status": "new"
+  },
+  {
+    "id": "lead_002",
+    "customerName": "Ananya Das",
+    "productName": "Emerald Polki Choker Set",
+    "productCode": "ALK-CHK-014",
+    "inquiryDate": "2026-05-24T16:42:00.000Z",
+    "status": "contacted"
+  },
+  {
+    "id": "lead_003",
+    "customerName": "Riya Menon",
+    "productName": "Kemp Bridal Waist Belt",
+    "productCode": "ALK-VDD-010",
+    "inquiryDate": "2026-05-21T11:05:00.000Z",
+    "status": "quoted"
+  },
+  {
+    "id": "lead_004",
+    "customerName": "Neha Varghese",
+    "productName": "Navaratna Antique Haram",
+    "productCode": "ALK-HRM-108",
+    "inquiryDate": "2026-05-20T13:48:00.000Z",
+    "status": "closed"
+  }
+]

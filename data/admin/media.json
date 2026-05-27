@@ -1,0 +1,42 @@
+[
+  {
+    "id": "med_001",
+    "fileName": "temple-necklace-front.jpg",
+    "url": "/images/admin/media-1.jpg",
+    "width": 1400,
+    "height": 1600,
+    "sizeKb": 324,
+    "type": "image",
+    "uploadedAt": "2026-05-16T10:00:00.000Z"
+  },
+  {
+    "id": "med_002",
+    "fileName": "bridal-set-closeup.jpg",
+    "url": "/images/admin/media-2.jpg",
+    "width": 1200,
+    "height": 1200,
+    "sizeKb": 287,
+    "type": "image",
+    "uploadedAt": "2026-05-17T07:24:00.000Z"
+  },
+  {
+    "id": "med_003",
+    "fileName": "banner-akshaya.jpg",
+    "url": "/images/admin/media-3.jpg",
+    "width": 1920,
+    "height": 760,
+    "sizeKb": 412,
+    "type": "image",
+    "uploadedAt": "2026-05-19T06:42:00.000Z"
+  },
+  {
+    "id": "med_004",
+    "fileName": "earrings-detail.jpg",
+    "url": "/images/admin/media-4.jpg",
+    "width": 1024,
+    "height": 1280,
+    "sizeKb": 211,
+    "type": "image",
+    "uploadedAt": "2026-05-20T12:30:00.000Z"
+  }
+]

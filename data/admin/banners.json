@@ -1,0 +1,29 @@
+[
+  {
+    "id": "bnr_001",
+    "title": "Akshaya Tritiya Gold Edit",
+    "subtitle": "Celebrate abundance with curated timeless pieces.",
+    "ctaText": "Explore Collection",
+    "image": "/images/admin/banner-1.jpg",
+    "isActive": true,
+    "order": 1
+  },
+  {
+    "id": "bnr_002",
+    "title": "Bridal Heritage Collection",
+    "subtitle": "Temple classics for your wedding rituals.",
+    "ctaText": "View Bridal",
+    "image": "/images/admin/banner-2.jpg",
+    "isActive": true,
+    "order": 2
+  },
+  {
+    "id": "bnr_003",
+    "title": "Daily Wear Gold Staples",
+    "subtitle": "Minimal luxury crafted for everyday shine.",
+    "ctaText": "Shop Daily Wear",
+    "image": "/images/admin/banner-3.jpg",
+    "isActive": false,
+    "order": 3
+  }
+]
