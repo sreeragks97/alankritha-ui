@@ -2,6 +2,8 @@ export type MetalType = "gold" | "silver";
 
 export type OccasionType = "bridal" | "festive" | "daily";
 
+export type { ProductImage } from "@/types/shared";
+
 export interface Product {
   id: string;
   slug: string;

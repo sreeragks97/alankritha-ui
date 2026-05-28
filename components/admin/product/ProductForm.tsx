@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ImageUploader } from "@/components/admin/product/ImageUploader";
-import { toSlug } from "@/lib/admin/selectors";
+import { toSlug } from "@/utils/slug";
 import type { AdminCategory, AdminProduct } from "@/types/admin";
 
 interface ProductFormProps {
@@ -96,10 +96,12 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
       .map((item) => item.trim())
       .filter(Boolean);
 
+    const nextStatus = action === "draft" ? "draft" : form.status === "draft" ? "active" : form.status;
+
     const payload: AdminProduct = {
       ...form,
       tags,
-      status: action === "publish" ? "active" : "draft",
+      status: nextStatus,
     };
     onSubmit(payload, action);
   };

@@ -1,4 +1,5 @@
 import { BRAND } from "@/lib/constants";
+import { formatCurrency } from "@/utils/currency";
 
 interface WhatsAppOptions {
   productName: string;
@@ -8,13 +9,7 @@ interface WhatsAppOptions {
   phone?: string;
 }
 
-export function formatCurrency(price: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(price);
-}
+export { formatCurrency };
 
 export function generateWhatsAppMessage(options: WhatsAppOptions): string {
   return `Hi, I am interested in:\n\nProduct: ${options.productName}\nCode: ${options.productCode}\nPrice: ${formatCurrency(options.price)}\n\nProduct Link: ${options.productLink}`;

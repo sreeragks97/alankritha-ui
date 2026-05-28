@@ -1,6 +1,8 @@
 export type ProductStatus = "active" | "inactive" | "draft";
 export type LeadStatus = "new" | "contacted" | "quoted" | "closed";
 
+export type { AdminUser, ProductImage } from "@/types/shared";
+
 export interface AdminProduct {
   id: string;
   name: string;

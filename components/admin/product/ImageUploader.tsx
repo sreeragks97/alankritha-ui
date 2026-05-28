@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { revokeObjectUrl } from "@/utils/image";
 
 interface ImageUploaderProps {
   images: string[];
@@ -9,10 +10,39 @@ interface ImageUploaderProps {
 
 export function ImageUploader({ images, onChange }: ImageUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const localBlobUrlsRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const knownBlobUrls = localBlobUrlsRef.current;
+
+    for (const blobUrl of knownBlobUrls) {
+      if (!images.includes(blobUrl)) {
+        revokeObjectUrl(blobUrl);
+        knownBlobUrls.delete(blobUrl);
+      }
+    }
+  }, [images]);
+
+  useEffect(() => {
+    const knownBlobUrls = localBlobUrlsRef.current;
+    return () => {
+      for (const blobUrl of knownBlobUrls) {
+        revokeObjectUrl(blobUrl);
+      }
+      knownBlobUrls.clear();
+    };
+  }, []);
 
   const pushFiles = (files: FileList | null) => {
     if (!files || files.length === 0) return;
-    const next = [...images, ...Array.from(files).map((file) => URL.createObjectURL(file))];
+
+    const uploadedObjectUrls = Array.from(files).map((file) => {
+      const blobUrl = URL.createObjectURL(file);
+      localBlobUrlsRef.current.add(blobUrl);
+      return blobUrl;
+    });
+
+    const next = [...images, ...uploadedObjectUrls];
     onChange(next);
   };
 
@@ -26,6 +56,12 @@ export function ImageUploader({ images, onChange }: ImageUploaderProps) {
   };
 
   const removeImage = (index: number) => {
+    const removedImage = images[index];
+    if (removedImage && localBlobUrlsRef.current.has(removedImage)) {
+      revokeObjectUrl(removedImage);
+      localBlobUrlsRef.current.delete(removedImage);
+    }
+
     onChange(images.filter((_, i) => i !== index));
   };
 

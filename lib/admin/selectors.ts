@@ -1,5 +1,8 @@
 import { paginate } from "@/lib/pagination";
 import type { AdminProduct, ProductQuery, WhatsAppLead, LeadStatus, PaginatedResult } from "@/types/admin";
+import { formatCurrency } from "@/utils/currency";
+import { toTimestamp } from "@/utils/date";
+import { toSlug } from "@/utils/slug";
 
 export function queryProducts(items: AdminProduct[], query: ProductQuery): PaginatedResult<AdminProduct> {
   const searched = query.search.trim().toLowerCase();
@@ -16,9 +19,7 @@ export function queryProducts(items: AdminProduct[], query: ProductQuery): Pagin
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  const sorted = [...filtered].sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-  );
+  const sorted = [...filtered].sort((a, b) => toTimestamp(b.updatedAt) - toTimestamp(a.updatedAt));
 
   const paginated = paginate(sorted, query.page, query.pageSize);
   return {
@@ -44,26 +45,11 @@ export function queryLeads(items: WhatsAppLead[], search: string, status: "all" 
   });
 }
 
-export function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-export function toSlug(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-}
-
 export function getLeadStatusLabel(status: LeadStatus) {
   if (status === "new") return "New";
   if (status === "contacted") return "Contacted";
   if (status === "quoted") return "Quoted";
   return "Closed";
 }
+
+export { formatCurrency, toSlug };
