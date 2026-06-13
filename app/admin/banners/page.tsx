@@ -30,7 +30,7 @@ export default function BannersPage() {
 
   if (loading) {
     return (
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         {Array.from({ length: 2 }).map((_, index) => (
           <div key={index} className="card-luxury h-96 animate-shimmer rounded-2xl" />
         ))}
@@ -39,7 +39,7 @@ export default function BannersPage() {
   }
 
   return (
-    <div className="grid gap-4 xl:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-2">
       {banners.map((banner, index) => (
         <article key={banner.id} className="card-luxury rounded-2xl p-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--brand-muted)]">Banner {index + 1}</p>
@@ -78,13 +78,13 @@ export default function BannersPage() {
               Active Banner
             </label>
             <div className="flex flex-wrap gap-2">
-              <button type="button" className="rounded-lg border border-[#e8dcc3] px-3 py-2 text-xs hover:bg-[#f8f0df]" onClick={() => move(index, -1)}>
+              <button type="button" className="inline-flex min-h-10 items-center rounded-lg border border-[#e8dcc3] px-3 py-2 text-xs hover:bg-[#f8f0df]" onClick={() => move(index, -1)}>
                 Move Up
               </button>
-              <button type="button" className="rounded-lg border border-[#e8dcc3] px-3 py-2 text-xs hover:bg-[#f8f0df]" onClick={() => move(index, 1)}>
+              <button type="button" className="inline-flex min-h-10 items-center rounded-lg border border-[#e8dcc3] px-3 py-2 text-xs hover:bg-[#f8f0df]" onClick={() => move(index, 1)}>
                 Move Down
               </button>
-              <button type="button" className="rounded-lg border border-[#e8dcc3] px-3 py-2 text-xs hover:bg-[#f8f0df]">
+              <button type="button" className="inline-flex min-h-10 items-center rounded-lg border border-[#e8dcc3] px-3 py-2 text-xs hover:bg-[#f8f0df]">
                 Upload Banner Image
               </button>
             </div>

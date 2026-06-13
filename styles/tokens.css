@@ -20,6 +20,12 @@
   --space-section-y: clamp(3.5rem, 6vw, 6rem);
   --space-section-y-tight: clamp(2.5rem, 4vw, 4rem);
 
+  --container-gutter: clamp(0.9rem, 3.6vw, 2.5rem);
+  --touch-target: 44px;
+
+  --nav-height-mobile: 72px;
+  --nav-height-desktop: 78px;
+
   --text-hero: clamp(2rem, 5vw, 4rem);
   --text-title: clamp(1.35rem, 2.2vw, 2.15rem);
   --text-body: clamp(0.975rem, 1.2vw, 1.05rem);

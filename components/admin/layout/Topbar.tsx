@@ -14,17 +14,17 @@ export function Topbar({ onOpenMenu }: TopbarProps) {
 
   return (
     <header className="sticky top-0 z-20 border-b border-[#e8dcc3] bg-[#fff9ef]/90 backdrop-blur-lg">
-      <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <div className="flex items-center justify-between gap-3 px-3 py-3 sm:gap-4 sm:px-6 sm:py-4">
         <div className="flex min-w-0 items-center gap-3">
           <button
             type="button"
             onClick={onOpenMenu}
-            className="rounded-lg border border-[#dcc9a2] bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-ink)] shadow-[0_8px_16px_rgba(49,39,23,0.08)] lg:hidden"
+            className="inline-flex min-h-11 items-center rounded-lg border border-[#dcc9a2] bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-ink)] shadow-[0_8px_16px_rgba(49,39,23,0.08)] lg:hidden"
           >
             Menu
           </button>
           <div className="min-w-0">
-            <p className="truncate font-heading text-xl text-[var(--brand-ink)] sm:text-2xl">Admin Workspace</p>
+            <p className="truncate font-heading text-lg text-[var(--brand-ink)] sm:text-2xl">Admin Workspace</p>
             <Breadcrumbs />
           </div>
         </div>
@@ -35,7 +35,7 @@ export function Topbar({ onOpenMenu }: TopbarProps) {
             <button
               type="button"
               onClick={() => setOpen((prev) => !prev)}
-              className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm font-medium text-[var(--brand-ink)] shadow-[0_8px_16px_rgba(49,39,23,0.08)]"
+              className="inline-flex min-h-11 items-center rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm font-medium text-[var(--brand-ink)] shadow-[0_8px_16px_rgba(49,39,23,0.08)]"
               aria-expanded={open}
               aria-controls="admin-user-menu"
             >

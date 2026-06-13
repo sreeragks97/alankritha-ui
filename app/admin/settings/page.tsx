@@ -59,7 +59,7 @@ export default function SettingsPage() {
             <input
               value={settings.storeName}
               onChange={(event) => setField("storeName", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
           <label className="space-y-1 text-sm">
@@ -68,7 +68,7 @@ export default function SettingsPage() {
               type="email"
               value={settings.supportEmail}
               onChange={(event) => setField("supportEmail", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
         </div>
@@ -83,7 +83,7 @@ export default function SettingsPage() {
               type="tel"
               value={settings.whatsappNumber}
               onChange={(event) => setField("whatsappNumber", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
           <label className="space-y-1 text-sm">
@@ -91,7 +91,7 @@ export default function SettingsPage() {
             <input
               value={settings.instagram}
               onChange={(event) => setField("instagram", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
           <label className="space-y-1 text-sm">
@@ -99,7 +99,7 @@ export default function SettingsPage() {
             <input
               value={settings.facebook}
               onChange={(event) => setField("facebook", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
         </div>
@@ -113,7 +113,7 @@ export default function SettingsPage() {
             <input
               value={settings.metaTitle}
               onChange={(event) => setField("metaTitle", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
           <label className="space-y-1 text-sm">
@@ -136,7 +136,7 @@ export default function SettingsPage() {
             <input
               value={settings.homepageHeroTitle}
               onChange={(event) => setField("homepageHeroTitle", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
           </label>
         </div>
@@ -145,7 +145,7 @@ export default function SettingsPage() {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="rounded-xl bg-[var(--brand-gold)] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+          className="inline-flex min-h-11 items-center rounded-xl bg-[var(--brand-gold)] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
         >
           Save Settings
         </button>

@@ -24,19 +24,19 @@ export function Pagination({ meta, basePath, query }: PaginationProps) {
   }
 
   return (
-    <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Pagination">
+    <nav className="mt-8 flex items-center justify-center gap-2 sm:mt-10" aria-label="Pagination">
       <Link
         href={pageHref(basePath, query, Math.max(1, meta.page - 1))}
-        className="rounded-full border border-[#cfbf9f] px-4 py-2 text-sm text-[var(--brand-gold-deep)]"
+        className="inline-flex min-h-11 items-center rounded-full border border-[#cfbf9f] px-4 py-2 text-sm text-[var(--brand-gold-deep)]"
       >
         Prev
       </Link>
-      <span className="rounded-full bg-[#f8edd8] px-4 py-2 text-sm text-[var(--brand-ink)]">
+      <span className="inline-flex min-h-11 items-center rounded-full bg-[#f8edd8] px-4 py-2 text-sm text-[var(--brand-ink)]">
         {meta.page} / {meta.totalPages}
       </span>
       <Link
         href={pageHref(basePath, query, Math.min(meta.totalPages, meta.page + 1))}
-        className="rounded-full border border-[#cfbf9f] px-4 py-2 text-sm text-[var(--brand-gold-deep)]"
+        className="inline-flex min-h-11 items-center rounded-full border border-[#cfbf9f] px-4 py-2 text-sm text-[var(--brand-gold-deep)]"
       >
         Next
       </Link>

@@ -40,7 +40,7 @@ export default function WhatsAppLeadsPage() {
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value as "all" | LeadStatus)}
-            className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+            className="min-h-11 rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
           >
             <option value="all">All Statuses</option>
             <option value="new">New</option>
@@ -54,11 +54,11 @@ export default function WhatsAppLeadsPage() {
       <section className="card-luxury overflow-hidden rounded-2xl">
         <DataTable
           columns={[
-            { key: "customer", title: "Customer Name", render: (item) => item.customerName },
+            { key: "customer", title: "Customer Name", mobileTitle: "Customer", render: (item) => item.customerName },
             { key: "product", title: "Product", render: (item) => item.productName },
-            { key: "code", title: "Product Code", render: (item) => item.productCode },
-            { key: "date", title: "Inquiry Date", render: (item) => new Date(item.inquiryDate).toLocaleString() },
-            { key: "status", title: "WhatsApp Status", render: (item) => <StatusBadge status={getLeadStatusLabel(item.status)} /> },
+            { key: "code", title: "Product Code", hideOnMobile: true, render: (item) => item.productCode },
+            { key: "date", title: "Inquiry Date", mobileTitle: "Date", render: (item) => new Date(item.inquiryDate).toLocaleString() },
+            { key: "status", title: "WhatsApp Status", mobileTitle: "Status", render: (item) => <StatusBadge status={getLeadStatusLabel(item.status)} /> },
           ]}
           rows={filtered}
           rowKey={(row) => row.id}

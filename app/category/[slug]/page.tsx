@@ -50,11 +50,11 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   return (
     <div className="container-shell py-8 sm:py-10 md:py-12">
       <SectionHeader title={category.name} subtitle={category.description} />
-      <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[280px_1fr] lg:gap-8">
         <FilterSidebar categories={categories} products={products} />
         <div>
           {result.items.length ? (
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
               {result.items.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

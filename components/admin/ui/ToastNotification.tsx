@@ -10,12 +10,12 @@ interface ToastNotificationProps {
 
 export function ToastNotification({ items, onDismiss }: ToastNotificationProps) {
   return (
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-[60] space-y-2 sm:right-5">
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-2 right-2 z-[60] space-y-2 sm:left-auto sm:right-5">
       <AnimatePresence>
         {items.map((item) => (
           <motion.div
             key={item.id}
-            className="w-72 rounded-xl border border-[#e8dcc3] bg-white p-3 shadow-lg"
+            className="w-[min(22rem,calc(100vw-1rem))] rounded-xl border border-[#e8dcc3] bg-white p-3 shadow-lg"
             role="status"
             aria-live="polite"
             initial={{ opacity: 0, y: 12, scale: 0.98 }}
@@ -31,7 +31,7 @@ export function ToastNotification({ items, onDismiss }: ToastNotificationProps) 
               <button
                 type="button"
                 onClick={() => onDismiss(item.id)}
-                className="rounded-md border border-[#ece1cf] px-2 py-1 text-xs hover:bg-[#f8f0df]"
+                className="inline-flex min-h-9 items-center rounded-md border border-[#ece1cf] px-2 py-1 text-xs hover:bg-[#f8f0df]"
               >
                 Close
               </button>

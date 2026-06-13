@@ -91,7 +91,7 @@ export default function AdminProductsPage() {
                 setPage(1);
                 setSelectedIds([]);
               }}
-              className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             >
               <option value="all">All Categories</option>
               {categories.map((item) => (
@@ -107,7 +107,7 @@ export default function AdminProductsPage() {
                 setPage(1);
                 setSelectedIds([]);
               }}
-              className="rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+              className="min-h-11 rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             >
               <option value="all">All Statuses</option>
               <option value="active">Active</option>
@@ -118,7 +118,7 @@ export default function AdminProductsPage() {
 
           <Link
             href="/admin/products/new"
-            className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
           >
             Add Product
           </Link>
@@ -126,7 +126,7 @@ export default function AdminProductsPage() {
       </section>
 
       <section className="card-luxury overflow-hidden rounded-2xl">
-        <div className="flex items-center justify-between border-b border-[#ede3d1] px-4 py-3 text-sm">
+        <div className="flex flex-col gap-2 border-b border-[#ede3d1] px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
           <label className="inline-flex items-center gap-2">
             <input type="checkbox" checked={selectedIds.length === result.items.length && result.items.length > 0} onChange={toggleSelectAll} />
             Bulk Select
@@ -140,6 +140,7 @@ export default function AdminProductsPage() {
             {
               key: "select",
               title: "Select",
+              hideOnMobile: true,
               render: (item) => (
                 <input
                   type="checkbox"
@@ -152,6 +153,7 @@ export default function AdminProductsPage() {
             {
               key: "product",
               title: "Product",
+              mobileTitle: "Product",
               render: (item) => (
                 <div className="flex items-center gap-3">
                   <div className="h-12 w-12 rounded-lg bg-[#f2e8d3] bg-cover bg-center" style={{ backgroundImage: `url(${item.images[0] || ""})` }} />
@@ -168,13 +170,15 @@ export default function AdminProductsPage() {
             {
               key: "featured",
               title: "Featured",
+              hideOnMobile: true,
               render: (item) => (item.isFeatured ? <span className="rounded-full bg-[#f5e5c0] px-2 py-1 text-xs">Featured</span> : "-"),
             },
             {
               key: "actions",
               title: "Actions",
+              mobileTitle: "Quick Action",
               render: (item) => (
-                <select className="rounded-lg border border-[#e8dcc3] bg-white px-2 py-1 text-xs focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]" defaultValue="">
+                <select className="min-h-10 rounded-lg border border-[#e8dcc3] bg-white px-2 py-1 text-xs focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]" defaultValue="">
                   <option value="" disabled>
                     Choose
                   </option>

@@ -28,19 +28,19 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
 
   return (
     <div className="container-shell py-8 sm:py-10 md:py-12">
-      <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+      <div className="grid gap-6 md:gap-8 lg:grid-cols-2 lg:gap-10">
         <ProductGallery images={product.images} alt={product.name} />
 
-        <div className="card-luxury h-fit space-y-5 p-6 sm:p-8">
+        <div className="card-luxury h-fit space-y-5 p-5 sm:p-7 md:p-8">
           <div>
             <span className="eyebrow-chip">{product.category.replace("-", " ")}</span>
-            <h1 className="mt-3 font-heading text-3xl leading-tight sm:text-4xl">{product.name}</h1>
+            <h1 className="mt-3 font-heading text-[clamp(1.65rem,6.4vw,2.25rem)] leading-tight">{product.name}</h1>
             <p className="mt-2 text-sm text-[var(--brand-muted)]">Code: {product.code}</p>
           </div>
 
-          <p className="text-3xl font-semibold text-[var(--brand-gold-deep)]">{formatCurrency(product.price)}</p>
+          <p className="text-[clamp(1.5rem,6vw,1.9rem)] font-semibold text-[var(--brand-gold-deep)]">{formatCurrency(product.price)}</p>
 
-          <p className="text-sm leading-7 text-[var(--brand-muted)]">{product.description}</p>
+          <p className="text-sm leading-6 text-[var(--brand-muted)] sm:leading-7">{product.description}</p>
 
           <div className="flex flex-wrap gap-2">
             {product.tags.map((tag) => (
@@ -54,7 +54,7 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
             href={whatsappHref}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex w-full items-center justify-center rounded-full bg-[#1FAF5D] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_22px_rgba(31,175,93,0.28)] hover:bg-[#18964f]"
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[#1FAF5D] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_22px_rgba(31,175,93,0.28)] hover:bg-[#18964f]"
           >
             Enquire on WhatsApp
           </a>
@@ -75,9 +75,9 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
         </div>
       </div>
 
-      <section className="mt-16 section-shell-tight">
+      <section className="mt-12 section-shell-tight sm:mt-16">
         <SectionHeader title="Related Products" subtitle="You may also love these designs." />
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
           {related.map((item) => (
             <ProductCard key={item.id} product={item} />
           ))}

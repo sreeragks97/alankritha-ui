@@ -53,16 +53,16 @@ export default function AdminDashboardPage() {
 
       <section className="grid gap-4 xl:grid-cols-3">
         <article className="card-luxury rounded-2xl p-5 xl:col-span-2">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-heading text-3xl">Recent Activity</p>
-            <Link href="/admin/products" className="gold-link rounded-full border border-[#d9cbaf] px-3 py-1.5 text-sm font-semibold">
+            <Link href="/admin/products" className="gold-link inline-flex min-h-11 items-center rounded-full border border-[#d9cbaf] px-3 py-1.5 text-sm font-semibold">
               View all products
             </Link>
           </div>
           <DataTable
             columns={[
               { key: "name", title: "Product", render: (item) => item.name },
-              { key: "code", title: "Code", render: (item) => item.code },
+              { key: "code", title: "Code", hideOnMobile: true, render: (item) => item.code },
               { key: "price", title: "Price", render: (item) => formatCurrency(item.price) },
               { key: "updatedAt", title: "Updated", render: (item) => new Date(item.updatedAt).toLocaleDateString() },
             ]}
@@ -78,14 +78,14 @@ export default function AdminDashboardPage() {
             <div className="mt-4 grid gap-2">
               <Link
                 href="/admin/products/new"
-                className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+                className="inline-flex min-h-11 items-center rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
               >
                 Add Product
               </Link>
-              <Link href="/admin/categories" className="rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold hover:bg-[#f7f0df]">
+              <Link href="/admin/categories" className="inline-flex min-h-11 items-center rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold hover:bg-[#f7f0df]">
                 Manage Categories
               </Link>
-              <Link href="/admin/banners" className="rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold hover:bg-[#f7f0df]">
+              <Link href="/admin/banners" className="inline-flex min-h-11 items-center rounded-xl border border-[#dcc8a2] px-4 py-2 text-sm font-semibold hover:bg-[#f7f0df]">
                 Update Banners
               </Link>
             </div>

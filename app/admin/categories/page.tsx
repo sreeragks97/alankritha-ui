@@ -97,7 +97,7 @@ export default function CategoriesPage() {
           <button
             type="button"
             onClick={openAdd}
-            className="rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
           >
             Add Category
           </button>
@@ -108,10 +108,11 @@ export default function CategoriesPage() {
         <DataTable
           columns={[
             { key: "name", title: "Name", render: (item) => item.name },
-            { key: "slug", title: "Slug", render: (item) => item.slug },
+            { key: "slug", title: "Slug", hideOnMobile: true, render: (item) => item.slug },
             {
               key: "banner",
               title: "Banner",
+              hideOnMobile: true,
               render: (item) => (
                 <div className="h-10 w-20 rounded-md bg-[#f2e7d2] bg-cover bg-center" style={{ backgroundImage: `url(${item.bannerImage})` }} />
               ),
@@ -121,14 +122,15 @@ export default function CategoriesPage() {
             {
               key: "actions",
               title: "Actions",
+              mobileTitle: "Manage",
               render: (item) => (
                 <div className="flex gap-2">
-                  <button type="button" className="rounded-md border border-[#e8dcc3] px-2 py-1 text-xs hover:bg-[#f8f0df]" onClick={() => openEdit(item)}>
+                  <button type="button" className="inline-flex min-h-10 items-center rounded-md border border-[#e8dcc3] px-2 py-1 text-xs hover:bg-[#f8f0df]" onClick={() => openEdit(item)}>
                     Edit
                   </button>
                   <button
                     type="button"
-                    className="rounded-md border border-[#f2d0c8] px-2 py-1 text-xs text-[#9d3f2d]"
+                    className="inline-flex min-h-10 items-center rounded-md border border-[#f2d0c8] px-2 py-1 text-xs text-[#9d3f2d]"
                     onClick={() => setPendingDelete(item)}
                   >
                     Delete
@@ -149,13 +151,13 @@ export default function CategoriesPage() {
         onClose={() => setModalOpen(false)}
         footer={
           <div className="flex justify-end gap-2">
-            <button type="button" className="rounded-lg border border-[#e8dcc3] px-3 py-2 text-sm" onClick={() => setModalOpen(false)}>
+            <button type="button" className="inline-flex min-h-11 items-center rounded-lg border border-[#e8dcc3] px-3 py-2 text-sm" onClick={() => setModalOpen(false)}>
               Cancel
             </button>
             <button
               type="button"
               onClick={save}
-              className="rounded-lg bg-[var(--brand-gold)] px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--brand-gold-deep)]"
+              className="inline-flex min-h-11 items-center rounded-lg bg-[var(--brand-gold)] px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--brand-gold-deep)]"
             >
               Save
             </button>

@@ -42,7 +42,7 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
             role="dialog"
             aria-modal="true"
             aria-label={title}
-            className="absolute left-0 top-0 h-full w-[84vw] max-w-sm bg-[var(--brand-card)] shadow-2xl"
+            className="absolute left-0 top-0 h-full w-[90vw] max-w-sm bg-[var(--brand-card)] shadow-2xl"
             initial={{ x: -28, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -28, opacity: 0 }}
@@ -52,13 +52,13 @@ export function Drawer({ open, onClose, title, children }: DrawerProps) {
               <p className="font-heading text-xl">{title}</p>
               <button
                 type="button"
-                className="rounded-md border border-[#e8dcc3] px-2 py-1 text-xs hover:bg-[#f6efde]"
+                className="inline-flex min-h-11 items-center rounded-md border border-[#e8dcc3] px-3 py-2 text-xs hover:bg-[#f6efde]"
                 onClick={onClose}
               >
                 Close
               </button>
             </div>
-            <div className="h-[calc(100%-65px)] overflow-y-auto">{children}</div>
+            <div className="h-[calc(100%-74px)] overflow-y-auto pb-[max(1rem,env(safe-area-inset-bottom))]">{children}</div>
           </motion.div>
         </div>
       ) : null}

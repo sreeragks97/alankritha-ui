@@ -279,24 +279,24 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
         <div className="mt-4 rounded-xl border border-[#e7d9bc] bg-[#f5fffa] p-3 text-sm text-[#1b5f42]">{whatsappPreview}</div>
       </section>
 
-      <div className="sticky bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-10 flex flex-wrap justify-end gap-2 rounded-xl border border-[#e8dcc3] bg-[#fffaf2]/95 p-3 backdrop-blur-sm">
+      <div className="sticky bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-10 flex flex-wrap justify-stretch gap-2 rounded-xl border border-[#e8dcc3] bg-[#fffaf2]/95 p-3 backdrop-blur-sm sm:justify-end">
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-[#e6d8bc] px-4 py-2 text-sm hover:bg-[#f8f0df]"
+          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[#e6d8bc] px-4 py-2 text-sm hover:bg-[#f8f0df] sm:flex-none"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={() => submit("draft")}
-          className="rounded-lg border border-[#dcc39d] px-4 py-2 text-sm font-semibold hover:bg-[#f8f0df]"
+          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[#dcc39d] px-4 py-2 text-sm font-semibold hover:bg-[#f8f0df] sm:flex-none"
         >
           Save Draft
         </button>
         <button
           type="submit"
-          className="rounded-lg bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)] sm:flex-none"
         >
           {mode === "create" ? "Publish" : "Update"}
         </button>

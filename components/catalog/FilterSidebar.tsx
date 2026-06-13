@@ -177,14 +177,14 @@ export function FilterSidebar({ categories, products }: FilterSidebarProps) {
         <button
           type="button"
           onClick={applyFilters}
-          className="flex-1 rounded-full bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+          className="flex-1 rounded-full bg-[var(--brand-gold)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
         >
           Apply
         </button>
         <button
           type="button"
           onClick={resetFilters}
-          className="flex-1 rounded-full border border-[#cfbf9f] px-4 py-2 text-sm font-semibold text-[var(--brand-gold-deep)] hover:bg-[#f7f0e1]"
+          className="flex-1 rounded-full border border-[#cfbf9f] px-4 py-2.5 text-sm font-semibold text-[var(--brand-gold-deep)] hover:bg-[#f7f0e1]"
         >
           Reset
         </button>
@@ -199,7 +199,7 @@ export function FilterSidebar({ categories, products }: FilterSidebarProps) {
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="mb-4 inline-flex rounded-full border border-[#cfbf9f] bg-white px-4 py-2 text-sm font-semibold text-[var(--brand-gold-deep)] shadow-[0_8px_16px_rgba(38,31,22,0.08)]"
+          className="mb-4 inline-flex min-h-11 items-center rounded-full border border-[#cfbf9f] bg-white px-4 py-2 text-sm font-semibold text-[var(--brand-gold-deep)] shadow-[0_8px_16px_rgba(38,31,22,0.08)]"
           aria-expanded={drawerOpen}
           aria-controls="catalog-filter-drawer"
         >
@@ -237,7 +237,7 @@ export function FilterSidebar({ categories, products }: FilterSidebarProps) {
                   <button
                     type="button"
                     onClick={() => setDrawerOpen(false)}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#dbcdb1] text-lg text-[#5d4b2b]"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#dbcdb1] text-lg text-[#5d4b2b]"
                     aria-label="Close filters"
                   >
                     ×

@@ -28,7 +28,7 @@ export function Modal({ open, title, onClose, children, footer }: ModalProps) {
   return (
     <AnimatePresence>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center p-2 sm:items-center sm:p-4">
           <motion.button
             type="button"
             className="absolute inset-0 bg-black/40"
@@ -52,7 +52,7 @@ export function Modal({ open, title, onClose, children, footer }: ModalProps) {
             <div className="border-b border-[#ede3d1] px-5 py-4">
               <h3 className="font-heading text-2xl">{title}</h3>
             </div>
-            <div className="max-h-[65vh] overflow-y-auto p-5">{children}</div>
+            <div className="max-h-[72vh] overflow-y-auto p-5 sm:max-h-[65vh]">{children}</div>
             {footer ? <div className="border-t border-[#ede3d1] px-5 py-4">{footer}</div> : null}
           </motion.div>
         </div>

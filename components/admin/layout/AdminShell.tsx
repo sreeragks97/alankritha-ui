@@ -25,7 +25,7 @@ export function AdminShell({ children }: AdminShellProps) {
 
         <div className="flex min-w-0 flex-1 flex-col">
           <Topbar onOpenMenu={() => setDrawerOpen(true)} />
-          <main className="flex-1 px-4 py-5 sm:px-6 sm:py-6">{children}</main>
+          <main className="flex-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-6">{children}</main>
         </div>
       </div>
     </div>
