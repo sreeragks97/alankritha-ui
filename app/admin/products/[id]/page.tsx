@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ProductForm } from "@/components/admin/product/ProductForm";
 import { EmptyState } from "@/components/admin/ui/EmptyState";
 import { ToastNotification } from "@/components/admin/ui/ToastNotification";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { useToast } from "@/hooks/useToast";
 import { adminRepository } from "@/lib/admin/repository";
 import type { AdminCategory, AdminProduct } from "@/types/admin";
@@ -27,7 +28,11 @@ export default function EditProductPage() {
   const product = useMemo(() => products.find((item) => item.id === params.id), [products, params.id]);
 
   if (loading) {
-    return <div className="card-luxury h-[520px] animate-shimmer rounded-2xl" />;
+    return (
+      <PageLoader label="Loading product details">
+        <Shimmer className="card-luxury h-[520px] rounded-2xl" />
+      </PageLoader>
+    );
   }
 
   if (!product) {

@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { DataTable } from "@/components/admin/ui/DataTable";
 import { SearchBar } from "@/components/admin/ui/SearchBar";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
+import { EmptyLeads, GenericErrorState } from "@/components/ui/states";
 import { adminRepository } from "@/lib/admin/repository";
 import { getLeadStatusLabel, queryLeads } from "@/lib/admin/selectors";
 import type { LeadStatus, WhatsAppLead } from "@/types/admin";
@@ -11,6 +13,7 @@ import type { LeadStatus, WhatsAppLead } from "@/types/admin";
 export default function WhatsAppLeadsPage() {
   const [leads, setLeads] = useState<WhatsAppLead[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasLoadError, setHasLoadError] = useState(false);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<"all" | LeadStatus>("all");
 
@@ -18,6 +21,7 @@ export default function WhatsAppLeadsPage() {
     void adminRepository
       .getWhatsAppLeads()
       .then(setLeads)
+      .catch(() => setHasLoadError(true))
       .finally(() => setLoading(false));
   }, []);
 
@@ -25,11 +29,21 @@ export default function WhatsAppLeadsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="card-luxury h-20 animate-shimmer rounded-2xl" />
-        <div className="card-luxury h-80 animate-shimmer rounded-2xl" />
-      </div>
+      <PageLoader label="Loading WhatsApp leads">
+        <div className="space-y-4">
+          <Shimmer className="card-luxury h-20 rounded-2xl" />
+          <Shimmer className="card-luxury h-80 rounded-2xl" />
+        </div>
+      </PageLoader>
     );
+  }
+
+  if (hasLoadError) {
+    return <GenericErrorState onRetry={() => window.location.reload()} />;
+  }
+
+  if (filtered.length === 0) {
+    return <EmptyLeads />;
   }
 
   return (

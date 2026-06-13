@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { DashboardCard } from "@/components/admin/ui/DashboardCard";
 import { DataTable } from "@/components/admin/ui/DataTable";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { adminRepository } from "@/lib/admin/repository";
 import { formatCurrency } from "@/lib/admin/selectors";
 import type { AdminProduct, AdminCategory, WhatsAppLead } from "@/types/admin";
@@ -31,14 +32,16 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="card-luxury h-28 animate-shimmer" />
-          ))}
+      <PageLoader label="Loading admin dashboard">
+        <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Shimmer key={index} className="card-luxury h-28" />
+            ))}
+          </div>
+          <Shimmer className="card-luxury h-72" />
         </div>
-        <div className="card-luxury h-72 animate-shimmer" />
-      </div>
+      </PageLoader>
     );
   }
 

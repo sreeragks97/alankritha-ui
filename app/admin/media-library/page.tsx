@@ -3,12 +3,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Modal } from "@/components/admin/ui/Modal";
 import { SearchBar } from "@/components/admin/ui/SearchBar";
+import { OptimizedImage } from "@/components/ui/image";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
+import { EmptyMedia, GenericErrorState } from "@/components/ui/states";
 import { adminRepository } from "@/lib/admin/repository";
 import type { MediaAsset } from "@/types/admin";
 
 export default function MediaLibraryPage() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasLoadError, setHasLoadError] = useState(false);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [preview, setPreview] = useState<MediaAsset | null>(null);
@@ -17,6 +21,7 @@ export default function MediaLibraryPage() {
     void adminRepository
       .getMediaAssets()
       .then(setAssets)
+      .catch(() => setHasLoadError(true))
       .finally(() => setLoading(false));
   }, []);
 
@@ -31,11 +36,21 @@ export default function MediaLibraryPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="card-luxury h-20 animate-shimmer rounded-2xl" />
-        <div className="card-luxury h-80 animate-shimmer rounded-2xl" />
-      </div>
+      <PageLoader label="Loading media library">
+        <div className="space-y-4">
+          <Shimmer className="card-luxury h-20 rounded-2xl" />
+          <Shimmer className="card-luxury h-80 rounded-2xl" />
+        </div>
+      </PageLoader>
     );
+  }
+
+  if (hasLoadError) {
+    return <GenericErrorState onRetry={() => window.location.reload()} />;
+  }
+
+  if (filtered.length === 0) {
+    return <EmptyMedia />;
   }
 
   return (
@@ -65,11 +80,19 @@ export default function MediaLibraryPage() {
             <article key={asset.id} className="rounded-xl border border-[#ebdfca] bg-white p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_rgba(56,46,32,0.1)]">
               <button
                 type="button"
-                className="aspect-square w-full rounded-lg bg-[#f1e7d3] bg-cover bg-center"
-                style={{ backgroundImage: `url(${asset.url})` }}
+                className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#f1e7d3]"
                 onClick={() => setPreview(asset)}
                 aria-label={`Preview ${asset.fileName}`}
-              />
+              >
+                <OptimizedImage
+                  src={asset.url}
+                  alt={asset.fileName}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                  className="object-cover object-center"
+                  fallbackLabel={`${asset.fileName} unavailable`}
+                />
+              </button>
               <div className="mt-3 space-y-1 text-xs text-[var(--brand-muted)]">
                 <p className="truncate font-medium text-[var(--brand-ink)]">{asset.fileName}</p>
                 <p>{new Date(asset.uploadedAt).toLocaleDateString()}</p>
@@ -90,7 +113,16 @@ export default function MediaLibraryPage() {
       <Modal open={Boolean(preview)} title={preview?.fileName ?? "Media preview"} onClose={() => setPreview(null)}>
         {preview ? (
           <div className="space-y-3">
-            <div className="aspect-video rounded-xl bg-[#f1e7d3] bg-cover bg-center" style={{ backgroundImage: `url(${preview.url})` }} />
+            <div className="relative aspect-video overflow-hidden rounded-xl bg-[#f1e7d3]">
+              <OptimizedImage
+                src={preview.url}
+                alt={preview.fileName}
+                fill
+                sizes="(max-width: 1024px) 100vw, 900px"
+                className="object-contain object-center"
+                fallbackLabel={`${preview.fileName} preview unavailable`}
+              />
+            </div>
             <div className="grid gap-2 text-sm text-[var(--brand-muted)]">
               <p>
                 Dimensions: {preview.width} x {preview.height}

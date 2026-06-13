@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Banner } from "@/components/common/Banner";
+import { OptimizedImage } from "@/components/ui/image";
 import { CategoryCard } from "@/components/common/CategoryCard";
 import { SectionHeader } from "@/components/common/SectionHeader";
 import { ProductCard } from "@/components/catalog/ProductCard";
@@ -20,6 +21,7 @@ export default function Home() {
           image={banners[0].image}
           ctaText={banners[0].ctaText}
           ctaHref={banners[0].ctaHref}
+          priority
         />
       </section>
 
@@ -78,10 +80,16 @@ export default function Home() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
           {["Bridal drape styling", "Temple set spotlight", "Everyday gold edit"].map((label, index) => (
             <div key={label} className="overflow-hidden rounded-2xl bg-[#efe4cd]">
-              <div
-                className="aspect-[3/4] bg-cover bg-center"
-                style={{ backgroundImage: `url(${products[index].images[0]})` }}
-              />
+              <div className="relative aspect-[3/4]">
+                <OptimizedImage
+                  src={products[index].images[0]}
+                  alt={label}
+                  fill
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                  className="object-cover object-center"
+                  fallbackLabel={`${label} preview unavailable`}
+                />
+              </div>
               <p className="p-3 text-xs text-[var(--brand-ink)] sm:text-sm">{label}</p>
             </div>
           ))}

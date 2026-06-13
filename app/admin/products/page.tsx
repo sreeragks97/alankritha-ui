@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { DataTable } from "@/components/admin/ui/DataTable";
-import { EmptyState } from "@/components/admin/ui/EmptyState";
 import { Pagination } from "@/components/admin/ui/Pagination";
 import { SearchBar } from "@/components/admin/ui/SearchBar";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
+import { OptimizedImage } from "@/components/ui/image";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
+import { EmptyProducts, GenericErrorState } from "@/components/ui/states";
 import { adminRepository } from "@/lib/admin/repository";
 import { formatCurrency, queryProducts } from "@/lib/admin/selectors";
 import type { AdminCategory, AdminProduct, ProductStatus } from "@/types/admin";
@@ -15,6 +17,7 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasLoadError, setHasLoadError] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState<"all" | ProductStatus>("all");
@@ -22,9 +25,9 @@ export default function AdminProductsPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   useEffect(() => {
-    void Promise.all([adminRepository.getProducts().then(setProducts), adminRepository.getCategories().then(setCategories)]).finally(() =>
-      setLoading(false),
-    );
+    void Promise.all([adminRepository.getProducts().then(setProducts), adminRepository.getCategories().then(setCategories)])
+      .catch(() => setHasLoadError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   const result = useMemo(
@@ -53,21 +56,21 @@ export default function AdminProductsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="card-luxury h-20 animate-shimmer rounded-2xl" />
-        <div className="card-luxury h-80 animate-shimmer rounded-2xl" />
-      </div>
+      <PageLoader label="Loading products list">
+        <div className="space-y-4">
+          <Shimmer className="card-luxury h-20 rounded-2xl" />
+          <Shimmer className="card-luxury h-80 rounded-2xl" />
+        </div>
+      </PageLoader>
     );
   }
 
+  if (hasLoadError) {
+    return <GenericErrorState onRetry={() => window.location.reload()} />;
+  }
+
   if (products.length === 0) {
-    return (
-      <EmptyState
-        title="No products yet"
-        description="Start by creating your first catalogue item for storefront publishing."
-        actionLabel="Add Product"
-      />
-    );
+    return <EmptyProducts onAction={() => window.location.assign("/admin/products/new")} />;
   }
 
   return (
@@ -156,7 +159,16 @@ export default function AdminProductsPage() {
               mobileTitle: "Product",
               render: (item) => (
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-lg bg-[#f2e8d3] bg-cover bg-center" style={{ backgroundImage: `url(${item.images[0] || ""})` }} />
+                  <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-[#f2e8d3]">
+                    <OptimizedImage
+                      src={item.images[0]}
+                      alt={item.name}
+                      fill
+                      sizes="48px"
+                      className="object-cover object-center"
+                      fallbackLabel={`${item.name} thumbnail unavailable`}
+                    />
+                  </div>
                   <div>
                     <p className="font-medium text-[var(--brand-ink)]">{item.name}</p>
                     <p className="text-xs text-[var(--brand-muted)]">{item.code}</p>

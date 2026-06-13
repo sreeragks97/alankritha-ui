@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { OptimizedImage } from "@/components/ui/image";
 import { revokeObjectUrl } from "@/utils/image";
 
 interface ImageUploaderProps {
@@ -88,7 +89,16 @@ export function ImageUploader({ images, onChange }: ImageUploaderProps) {
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {images.map((image, index) => (
             <div key={`${image}-${index}`} className="rounded-xl border border-[#ebdfca] bg-white p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_rgba(56,46,32,0.1)]">
-              <div className="aspect-[4/3] rounded-lg bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
+              <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[#f1e7d3]">
+                <OptimizedImage
+                  src={image}
+                  alt={`Product image ${index + 1}`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  className="object-cover object-center"
+                  fallbackLabel={`Product image ${index + 1} unavailable`}
+                />
+              </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button
                   type="button"

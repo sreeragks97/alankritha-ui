@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ToastNotification } from "@/components/admin/ui/ToastNotification";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { useToast } from "@/hooks/useToast";
 import { adminRepository } from "@/lib/admin/repository";
 import type { AdminSettings } from "@/types/admin";
@@ -35,11 +36,13 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <div key={index} className="card-luxury h-52 animate-shimmer rounded-2xl" />
-        ))}
-      </div>
+      <PageLoader label="Loading settings">
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Shimmer key={index} className="card-luxury h-52 rounded-2xl" />
+          ))}
+        </div>
+      </PageLoader>
     );
   }
 

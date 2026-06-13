@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { OptimizedImage } from "@/components/ui/image";
 
 interface ProductGalleryProps {
   images: string[];
@@ -86,14 +87,21 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${safeImages[active]}-mobile`}
-                className="aspect-[4/5] w-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${safeImages[active]})` }}
-                aria-label={alt}
+                className="relative aspect-[4/5] w-full"
                 initial={{ opacity: 0.55, scale: 1.02 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0.45, scale: 1.01 }}
                 transition={transition}
-              />
+              >
+                <OptimizedImage
+                  src={safeImages[active]}
+                  alt={alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 0px"
+                  className="object-cover object-center"
+                  fallbackLabel={`${alt} image unavailable`}
+                />
+              </motion.div>
             </AnimatePresence>
           </button>
 
@@ -151,7 +159,16 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
               aria-label={`Select image ${index + 1}`}
               aria-pressed={index === active}
             >
-              <div className="h-full w-full bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
+              <div className="relative h-full w-full">
+                <OptimizedImage
+                  src={image}
+                  alt={`${alt} thumbnail ${index + 1}`}
+                  fill
+                  sizes="56px"
+                  className="object-cover object-center"
+                  fallbackLabel={`${alt} thumbnail unavailable`}
+                />
+              </div>
             </button>
           ))}
         </div>
@@ -172,7 +189,16 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
               aria-label={`View image ${index + 1}`}
               aria-pressed={index === active}
             >
-              <div className="h-full w-full bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
+              <div className="relative h-full w-full">
+                <OptimizedImage
+                  src={image}
+                  alt={`${alt} thumbnail ${index + 1}`}
+                  fill
+                  sizes="88px"
+                  className="object-cover object-center"
+                  fallbackLabel={`${alt} thumbnail unavailable`}
+                />
+              </div>
             </button>
           ))}
         </div>
@@ -186,14 +212,21 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
             <AnimatePresence mode="wait">
               <motion.div
                 key={safeImages[active]}
-                className="aspect-[4/5] w-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${safeImages[active]})` }}
-                aria-label={alt}
+                className="relative aspect-[4/5] w-full"
                 initial={{ opacity: 0.55, scale: 1.02 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0.45, scale: 1.01 }}
                 transition={transition}
-              />
+              >
+                <OptimizedImage
+                  src={safeImages[active]}
+                  alt={alt}
+                  fill
+                  sizes="(max-width: 1280px) 70vw, 820px"
+                  className="object-cover object-center"
+                  fallbackLabel={`${alt} image unavailable`}
+                />
+              </motion.div>
             </AnimatePresence>
           </button>
         </div>
@@ -240,11 +273,16 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
 
               <div className="relative">
                 <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-[#8a7b58] bg-[#1d1811]">
-                  <div
-                    className="aspect-[4/5] w-full bg-contain bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${safeImages[active]})` }}
-                    aria-label={alt}
-                  />
+                  <div className="relative aspect-[4/5] w-full">
+                    <OptimizedImage
+                      src={safeImages[active]}
+                      alt={alt}
+                      fill
+                      sizes="(max-width: 1280px) 90vw, 980px"
+                      className="object-contain object-center"
+                      fallbackLabel={`${alt} image unavailable`}
+                    />
+                  </div>
                 </div>
 
                 {safeImages.length > 1 ? (

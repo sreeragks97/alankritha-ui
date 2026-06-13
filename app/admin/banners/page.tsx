@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { OptimizedImage } from "@/components/ui/image";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { adminRepository } from "@/lib/admin/repository";
 import type { AdminBanner } from "@/types/admin";
 
@@ -30,11 +32,13 @@ export default function BannersPage() {
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2">
-        {Array.from({ length: 2 }).map((_, index) => (
-          <div key={index} className="card-luxury h-96 animate-shimmer rounded-2xl" />
-        ))}
-      </div>
+      <PageLoader label="Loading banners">
+        <div className="grid gap-4 md:grid-cols-2">
+          {Array.from({ length: 2 }).map((_, index) => (
+            <Shimmer key={index} className="card-luxury h-96 rounded-2xl" />
+          ))}
+        </div>
+      </PageLoader>
     );
   }
 
@@ -43,7 +47,16 @@ export default function BannersPage() {
       {banners.map((banner, index) => (
         <article key={banner.id} className="card-luxury rounded-2xl p-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--brand-muted)]">Banner {index + 1}</p>
-          <div className="aspect-[16/6] rounded-xl bg-[#efe3cb] bg-cover bg-center" style={{ backgroundImage: `url(${banner.image})` }} />
+          <div className="relative aspect-[16/6] overflow-hidden rounded-xl bg-[#efe3cb]">
+            <OptimizedImage
+              src={banner.image}
+              alt={banner.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+              fallbackLabel={`${banner.title} banner unavailable`}
+            />
+          </div>
           <div className="mt-4 grid gap-3">
             <label className="space-y-1 text-sm">
               <span>Title</span>

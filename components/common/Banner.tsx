@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { OptimizedImage } from "@/components/ui/image";
 
 interface BannerProps {
   title: string;
@@ -6,18 +7,22 @@ interface BannerProps {
   image: string;
   ctaText: string;
   ctaHref: string;
+  priority?: boolean;
 }
 
-export function Banner({ title, subtitle, image, ctaText, ctaHref }: BannerProps) {
+export function Banner({ title, subtitle, image, ctaText, ctaHref, priority = false }: BannerProps) {
   return (
-    <section
-      className="card-luxury relative isolate min-h-[17rem] overflow-hidden p-5 sm:min-h-[21rem] sm:p-10 md:p-12"
-      style={{
-        backgroundImage: `linear-gradient(110deg, rgba(22, 18, 12, 0.84) 0%, rgba(22, 18, 12, 0.56) 36%, rgba(22, 18, 12, 0.26) 62%, rgba(22, 18, 12, 0.2) 100%), url(${image})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center 35%",
-      }}
-    >
+    <section className="card-luxury relative isolate min-h-[17rem] overflow-hidden p-5 sm:min-h-[21rem] sm:p-10 md:p-12">
+      <OptimizedImage
+        src={image}
+        alt={title}
+        fill
+        priority={priority}
+        sizes="(max-width: 640px) 100vw, 1220px"
+        className="object-cover object-center"
+      />
+
+      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(22,18,12,0.84)_0%,rgba(22,18,12,0.56)_36%,rgba(22,18,12,0.26)_62%,rgba(22,18,12,0.2)_100%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(110%_90%_at_18%_100%,rgba(242,212,154,0.2)_0%,rgba(242,212,154,0)_64%)]" />
       <div className="relative max-w-xl text-white">
         <p className="eyebrow-chip mb-3 bg-[rgba(246,228,186,0.15)] text-[#f7e6bf]">Signature Edit</p>

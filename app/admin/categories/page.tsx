@@ -6,6 +6,9 @@ import { DataTable } from "@/components/admin/ui/DataTable";
 import { Modal } from "@/components/admin/ui/Modal";
 import { SearchBar } from "@/components/admin/ui/SearchBar";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
+import { OptimizedImage } from "@/components/ui/image";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
+import { EmptyCategories, GenericErrorState } from "@/components/ui/states";
 import { adminRepository } from "@/lib/admin/repository";
 import { toSlug } from "@/lib/admin/selectors";
 import type { AdminCategory } from "@/types/admin";
@@ -13,6 +16,7 @@ import type { AdminCategory } from "@/types/admin";
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasLoadError, setHasLoadError] = useState(false);
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<AdminCategory | null>(null);
@@ -24,6 +28,7 @@ export default function CategoriesPage() {
     void adminRepository
       .getCategories()
       .then(setCategories)
+      .catch(() => setHasLoadError(true))
       .finally(() => setLoading(false));
   }, []);
 
@@ -82,11 +87,21 @@ export default function CategoriesPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="card-luxury h-20 animate-shimmer rounded-2xl" />
-        <div className="card-luxury h-80 animate-shimmer rounded-2xl" />
-      </div>
+      <PageLoader label="Loading categories">
+        <div className="space-y-4">
+          <Shimmer className="card-luxury h-20 rounded-2xl" />
+          <Shimmer className="card-luxury h-80 rounded-2xl" />
+        </div>
+      </PageLoader>
     );
+  }
+
+  if (hasLoadError) {
+    return <GenericErrorState onRetry={() => window.location.reload()} />;
+  }
+
+  if (filtered.length === 0) {
+    return <EmptyCategories onAction={openAdd} />;
   }
 
   return (
@@ -114,7 +129,16 @@ export default function CategoriesPage() {
               title: "Banner",
               hideOnMobile: true,
               render: (item) => (
-                <div className="h-10 w-20 rounded-md bg-[#f2e7d2] bg-cover bg-center" style={{ backgroundImage: `url(${item.bannerImage})` }} />
+                <div className="relative h-10 w-20 overflow-hidden rounded-md bg-[#f2e7d2]">
+                  <OptimizedImage
+                    src={item.bannerImage}
+                    alt={`${item.name} banner`}
+                    fill
+                    sizes="80px"
+                    className="object-cover object-center"
+                    fallbackLabel={`${item.name} banner unavailable`}
+                  />
+                </div>
               ),
             },
             { key: "count", title: "Products", render: (item) => item.productCount },

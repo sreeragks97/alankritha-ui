@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { OptimizedImage } from "@/components/ui/image";
 import { formatCurrency, generateWhatsAppUrl } from "@/lib/whatsapp";
 import type { Product } from "@/types/product";
 
@@ -19,10 +20,16 @@ export function ProductCard({ product }: ProductCardProps) {
     <article className="card-luxury group flex h-full flex-col overflow-hidden border-[color:color-mix(in_srgb,var(--brand-gold)_24%,#fff_76%)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)]">
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_top,rgba(22,18,12,0.16),rgba(22,18,12,0.02))] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        <div
-          className="aspect-[4/5] w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.04]"
-          style={{ backgroundImage: `url(${product.images[0]})` }}
-        />
+        <div className="relative aspect-[4/5] w-full">
+          <OptimizedImage
+            src={product.images[0]}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
+            fallbackLabel={`${product.name} image unavailable`}
+          />
+        </div>
         <span className="absolute left-2.5 top-2.5 z-20 rounded-full bg-[rgba(255,249,236,0.93)] px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.11em] text-[#705726] sm:left-3 sm:top-3 sm:text-[0.68rem]">
           {product.metalType}
         </span>

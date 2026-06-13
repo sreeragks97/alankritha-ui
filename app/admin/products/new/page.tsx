@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProductForm } from "@/components/admin/product/ProductForm";
 import { ToastNotification } from "@/components/admin/ui/ToastNotification";
+import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { useToast } from "@/hooks/useToast";
 import { adminRepository } from "@/lib/admin/repository";
 import type { AdminCategory, AdminProduct } from "@/types/admin";
@@ -39,7 +40,11 @@ export default function NewProductPage() {
         <p className="mt-1 font-heading text-3xl">Add Product</p>
         <p className="mt-1 text-sm text-[var(--brand-muted)]">Create premium catalogue entries with media, SEO, and WhatsApp preview.</p>
       </div>
-      {loading ? <div className="card-luxury h-[520px] animate-shimmer rounded-2xl" /> : null}
+      {loading ? (
+        <PageLoader label="Loading product form">
+          <Shimmer className="card-luxury h-[520px] rounded-2xl" />
+        </PageLoader>
+      ) : null}
       {!loading ? <ProductForm mode="create" categories={categories} onSubmit={handleSubmit} onCancel={() => router.push("/admin/products")} /> : null}
       <ToastNotification items={toasts} onDismiss={removeToast} />
     </div>
