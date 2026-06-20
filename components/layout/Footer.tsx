@@ -15,14 +15,8 @@ export function Footer() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-muted)]">Explore</p>
           <div className="mt-3 flex flex-col gap-2 text-sm">
-            <Link className="gold-link" href="/category/necklaces">
-              Necklaces
-            </Link>
-            <Link className="gold-link" href="/category/bridal-sets">
-              Bridal Sets
-            </Link>
-            <Link className="gold-link" href="/lookbook">
-              Lookbook
+            <Link className="gold-link" href="/category/bangles">
+              Catalogue
             </Link>
           </div>
         </div>

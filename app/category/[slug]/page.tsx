@@ -31,7 +31,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const [categoryRow, categoryRows, productRows] = await Promise.all([
     categoryService.getCategoryBySlug(slug),
     categoryService.getCategories({ activeOnly: true }),
-    productService.getProducts({ page: 1, limit: 500, activeOnly: true }),
+    productService.getProducts({ page: 1, limit: 100, activeOnly: true }),
   ]);
 
   const categories = categoryRows.map(mapCategoryToUiCategory);

@@ -1,6 +1,7 @@
 import type { AdminBanner, AdminCategory, AdminProduct, ProductStatus } from "@/types/admin";
 import type { Banner, Category, ProductWithRelations } from "@/src/types/database";
 import type { ProductInput, ProductUpdateInput } from "@/src/validators/ProductSchema";
+import { isObjectUrl } from "@/utils/image";
 
 function toAdminStatus(active: boolean): ProductStatus {
   return active ? "active" : "inactive";
@@ -69,7 +70,26 @@ function toActive(status: ProductStatus): boolean {
   return status === "active";
 }
 
+function normalizeProductImages(images: string[]) {
+  const trimmed = images.map((imageUrl) => imageUrl.trim()).filter((imageUrl) => imageUrl.length > 0);
+
+  if (trimmed.some((imageUrl) => isObjectUrl(imageUrl))) {
+    throw new Error("Image upload is still in progress. Please wait before saving.");
+  }
+
+  const deduped = trimmed.filter((imageUrl, index) => trimmed.indexOf(imageUrl) === index);
+
+  console.info("[ProductImageDebug] Mapped admin product images", {
+    imageCount: deduped.length,
+    imageUrls: deduped,
+  });
+
+  return deduped;
+}
+
 export function mapAdminProductToProductInput(product: AdminProduct): ProductInput {
+  const normalizedImages = normalizeProductImages(product.images);
+
   return {
     name: product.name.trim(),
     code: product.code.trim(),
@@ -81,8 +101,7 @@ export function mapAdminProductToProductInput(product: AdminProduct): ProductInp
     featured: product.isFeatured,
     sold_out: product.isSoldOut,
     active: toActive(product.status),
-    images: product.images
-      .filter((imageUrl) => imageUrl.trim().length > 0)
+    images: normalizedImages
       .map((imageUrl, index) => ({
         image_url: imageUrl,
         sort_order: index,

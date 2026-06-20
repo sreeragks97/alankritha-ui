@@ -51,6 +51,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
   );
   const [tagInput, setTagInput] = useState(form.tags.join(", "));
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [metaTitle, setMetaTitle] = useState(initialProduct?.name ?? "");
   const [metaDescription, setMetaDescription] = useState(initialProduct?.description ?? "");
 
@@ -85,13 +86,24 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
     if (!form.code.trim()) nextErrors.code = "Product code is required";
     if (!form.slug.trim()) nextErrors.slug = "Slug is required";
     if (form.price <= 0) nextErrors.price = "Price must be greater than zero";
+    if (form.images.some((imageUrl) => imageUrl.startsWith("blob:"))) {
+      nextErrors.images = "Temporary image URLs cannot be saved. Wait for upload completion.";
+    }
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
 
   const submit = async (action: "draft" | "publish") => {
-    if (isSubmitting) return;
+    if (isSubmitting || isUploadingImages) {
+      if (isUploadingImages) {
+        setErrors((prev) => ({
+          ...prev,
+          images: "Image uploads are still in progress. Please wait until uploads complete.",
+        }));
+      }
+      return;
+    }
     if (!validate()) return;
     const tags = tagInput
       .split(",")
@@ -219,7 +231,24 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
       <section className="card-luxury rounded-2xl p-5 sm:p-6">
         <p className="font-heading text-2xl">4. Product Images</p>
         <div className="mt-4">
-          <ImageUploader images={form.images} onChange={(images) => setField("images", images)} />
+          <ImageUploader
+            images={form.images}
+            onChange={(images) => {
+              setField("images", images);
+              setErrors((prev) => {
+                if (!prev.images) return prev;
+                const next = { ...prev };
+                delete next.images;
+                return next;
+              });
+            }}
+            onUploadingChange={setIsUploadingImages}
+            disabled={isSubmitting}
+          />
+          {isUploadingImages ? (
+            <p className="mt-2 text-xs text-[var(--brand-muted)]">Uploading images to Cloudinary. Save will be enabled when uploads finish.</p>
+          ) : null}
+          {errors.images ? <p className="mt-2 text-xs text-[#9d3f2d]">{errors.images}</p> : null}
         </div>
       </section>
 
@@ -286,7 +315,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
         <button
           type="button"
           onClick={onCancel}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isUploadingImages}
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[#e6d8bc] px-4 py-2 text-sm hover:bg-[#f8f0df] sm:flex-none"
         >
           Cancel
@@ -296,17 +325,17 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
           onClick={() => {
             void submit("draft");
           }}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isUploadingImages}
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[#dcc39d] px-4 py-2 text-sm font-semibold hover:bg-[#f8f0df] sm:flex-none"
         >
-          Save Draft
+          {isUploadingImages ? "Uploading Images..." : "Save Draft"}
         </button>
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isUploadingImages}
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)] sm:flex-none"
         >
-          {isSubmitting ? "Saving..." : mode === "create" ? "Publish" : "Update"}
+          {isUploadingImages ? "Uploading Images..." : isSubmitting ? "Saving..." : mode === "create" ? "Publish" : "Update"}
         </button>
       </div>
     </form>

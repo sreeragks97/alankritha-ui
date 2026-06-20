@@ -26,9 +26,11 @@ export class ProductService {
   }
 
   async getProducts(options?: ProductListOptions) {
+    const safeLimit = typeof options?.limit === "number" ? Math.min(options.limit, 100) : undefined;
+
     const parsed = productQuerySchema.parse({
       page: options?.page,
-      limit: options?.limit,
+      limit: safeLimit,
       search: options?.search,
       category: options?.category,
       active: options?.active,
@@ -48,14 +50,7 @@ export class ProductService {
   }
 
   async getFeaturedProducts(limit = 8) {
-    const result = await this.repository.getProducts({
-      page: 1,
-      limit,
-      activeOnly: true,
-      featuredOnly: true,
-    });
-
-    return result.items;
+    return this.repository.getFeaturedProducts(limit);
   }
 
   async getProductBySlug(slug: string): Promise<ProductWithRelations | null> {
@@ -67,12 +62,7 @@ export class ProductService {
   }
 
   async getProductsByCategory(slug: string, page = 1, limit = 12) {
-    return this.repository.getProducts({
-      page,
-      limit,
-      categorySlug: slug,
-      activeOnly: true,
-    });
+    return this.repository.getProductsByCategory(slug, page, limit);
   }
 
   async searchProducts(term: string, page = 1, limit = 12) {

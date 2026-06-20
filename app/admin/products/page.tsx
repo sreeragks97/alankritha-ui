@@ -18,9 +18,6 @@ import { useDeleteProduct, useProducts } from "@/src/hooks/useProducts";
 import { mapCategoryToAdminCategory, mapProductToAdminProduct } from "@/src/utils/adminMappers";
 import type { AdminProduct, ProductStatus } from "@/types/admin";
 
-const FALLBACK_THUMBNAIL =
-  "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=640&q=80";
-
 export default function AdminProductsPage() {
   const router = useRouter();
   const { toasts, showToast, removeToast } = useToast();
@@ -232,7 +229,7 @@ export default function AdminProductsPage() {
                 <div className="flex items-center gap-3">
                   <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-[#f2e8d3]">
                     <OptimizedImage
-                      src={item.images[0] ?? FALLBACK_THUMBNAIL}
+                      src={item.images[0]}
                       alt={item.name}
                       fill
                       sizes="48px"

@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const productImageSchema = z.object({
-  image_url: z.string().url("Image URL must be valid"),
+  image_url: z
+    .string()
+    .url("Image URL must be valid")
+    .refine((url) => url.startsWith("https://res.cloudinary.com/"), "Product images must use Cloudinary secure URLs"),
   sort_order: z.number().int().min(0).default(0),
 });
 

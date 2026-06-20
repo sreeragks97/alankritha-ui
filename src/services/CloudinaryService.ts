@@ -12,6 +12,16 @@ interface CloudinaryUploadResult {
   created_at?: string;
 }
 
+function assertUploadResult(payload: Partial<CloudinaryUploadResult>): asserts payload is CloudinaryUploadResult {
+  if (!payload.secure_url || !payload.public_id) {
+    throw new AppError("Cloudinary upload response is invalid", {
+      code: "CLOUDINARY_UPLOAD_INVALID_RESPONSE",
+      status: 502,
+      cause: payload,
+    });
+  }
+}
+
 export class CloudinaryService {
   async uploadImage(file: File, onProgress?: (percentage: number) => void): Promise<CloudinaryUploadResult> {
     const env = getPublicEnv();
@@ -53,7 +63,15 @@ export class CloudinaryService {
           return;
         }
 
-        const parsed = JSON.parse(xhr.responseText) as CloudinaryUploadResult;
+        const parsed = JSON.parse(xhr.responseText) as Partial<CloudinaryUploadResult>;
+        assertUploadResult(parsed);
+
+        console.info("[ProductImageDebug] Cloudinary upload response", {
+          secureUrl: parsed.secure_url,
+          publicId: parsed.public_id,
+          bytes: parsed.bytes,
+        });
+
         resolve(parsed);
       };
 
@@ -87,5 +105,9 @@ export class CloudinaryService {
         status: response.status,
       });
     }
+
+    console.info("[ProductImageDebug] Cloudinary image deleted", {
+      publicId,
+    });
   }
 }

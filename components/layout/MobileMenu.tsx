@@ -4,13 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BRAND } from "@/lib/constants";
-import type { Category } from "@/types/product";
 
-interface MobileMenuProps {
-  categories: Category[];
-}
-
-export function MobileMenu({ categories }: MobileMenuProps) {
+export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const menuTransition = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
@@ -64,7 +59,7 @@ export function MobileMenu({ categories }: MobileMenuProps) {
               <div className="mb-5 flex items-center justify-between">
                 <div>
                   <p className="kicker">Navigation</p>
-                  <p className="font-heading text-xl text-[#2f281d]">Browse Categories</p>
+                  <p className="font-heading text-xl text-[#2f281d]">Browse Menu</p>
                 </div>
                 <button
                   type="button"
@@ -78,23 +73,10 @@ export function MobileMenu({ categories }: MobileMenuProps) {
               <nav className="flex flex-col gap-1.5" aria-label="Mobile navigation">
                 <Link
                   className="touch-target inline-flex min-h-11 items-center rounded-xl px-3 py-2.5 text-[0.96rem] text-[#4d412f] hover:bg-[#f5efdf]"
-                  href="/"
+                  href="/category/bangles"
                   onClick={() => setOpen(false)}
                 >
-                  Home
-                </Link>
-                {categories.map((category) => (
-                  <Link
-                    key={category.id}
-                    className="touch-target inline-flex min-h-11 items-center rounded-xl px-3 py-2.5 text-[0.96rem] text-[#4d412f] hover:bg-[#f5efdf]"
-                    href={`/category/${category.slug}`}
-                    onClick={() => setOpen(false)}
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-                <Link className="touch-target inline-flex min-h-11 items-center rounded-xl px-3 py-2.5 text-[0.96rem] text-[#4d412f] hover:bg-[#f5efdf]" href="/lookbook" onClick={() => setOpen(false)}>
-                  Lookbook
+                  Catalogue
                 </Link>
                 <Link className="touch-target inline-flex min-h-11 items-center rounded-xl px-3 py-2.5 text-[0.96rem] text-[#4d412f] hover:bg-[#f5efdf]" href="/about" onClick={() => setOpen(false)}>
                   About

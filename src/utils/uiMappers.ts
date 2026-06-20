@@ -1,15 +1,13 @@
 import type { Banner as UiBanner, Category as UiCategory, Product as UiProduct } from "@/types/product";
 import type { Banner, Category, ProductWithRelations } from "@/src/types/database";
 
-const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80";
-
 export function mapCategoryToUiCategory(category: Category): UiCategory {
   return {
     id: category.id,
     name: category.name,
     slug: category.slug,
     description: category.description ?? "Explore curated jewellery designs.",
-    image: category.banner_image_url ?? DEFAULT_IMAGE,
+    image: category.banner_image_url ?? "",
   };
 }
 
@@ -18,7 +16,7 @@ export function mapBannerToUiBanner(banner: Banner): UiBanner {
     id: banner.id,
     title: banner.title ?? "Signature Collection",
     subtitle: banner.subtitle ?? "Discover handcrafted jewellery stories.",
-    image: banner.image_url ?? DEFAULT_IMAGE,
+    image: banner.image_url ?? "",
     ctaText: banner.button_text ?? "View Collection",
     ctaHref: banner.button_link ?? "/category/necklaces",
   };
@@ -29,6 +27,12 @@ export function mapProductToUiProduct(product: ProductWithRelations): UiProduct 
   const imageUrls = sortedImages.map((item) => item.image_url);
   const categorySlug = product.category?.slug ?? "uncategorized";
 
+  console.info("[ProductImageDebug] Mapped product images for UI", {
+    productId: product.id,
+    imageCount: imageUrls.length,
+    imageUrls,
+  });
+
   return {
     id: product.id,
     slug: product.slug,
@@ -36,7 +40,7 @@ export function mapProductToUiProduct(product: ProductWithRelations): UiProduct 
     code: product.code,
     category: categorySlug,
     price: Number(product.offer_price ?? product.price),
-    images: imageUrls.length > 0 ? imageUrls : [DEFAULT_IMAGE],
+    images: imageUrls,
     description: product.description ?? "No description available.",
     tags: [],
     metalType: "gold",

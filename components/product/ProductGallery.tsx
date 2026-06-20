@@ -13,13 +13,8 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
   const [active, setActive] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const safeImages = useMemo(
-    () =>
-      images.length
-        ? images
-        : ["https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80"],
-    [images],
-  );
+  const safeImages = useMemo(() => (images.length ? images : [""]), [images]);
+  const activeIndex = Math.min(active, safeImages.length - 1);
   const transition = { duration: 0.3, ease: [0.22, 1, 0.36, 1] as const };
 
   useEffect(() => {
@@ -82,11 +77,11 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
             onClick={() => setLightboxOpen(true)}
             onTouchStart={(event) => setTouchStartX(event.changedTouches[0]?.clientX ?? null)}
             onTouchEnd={(event) => onTouchEnd(event.changedTouches[0]?.clientX ?? 0)}
-            aria-label={`Open image ${active + 1} in full view`}
+            aria-label={`Open image ${activeIndex + 1} in full view`}
           >
             <AnimatePresence mode="wait">
               <motion.div
-                key={`${safeImages[active]}-mobile`}
+                key={`${safeImages[activeIndex]}-mobile`}
                 className="relative aspect-[4/5] w-full"
                 initial={{ opacity: 0.55, scale: 1.02 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -94,7 +89,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
                 transition={transition}
               >
                 <OptimizedImage
-                  src={safeImages[active]}
+                  src={safeImages[activeIndex]}
                   alt={alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 0px"
@@ -129,7 +124,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
 
         <div className="mt-2 flex items-center justify-between gap-3 px-1">
           <p className="text-xs uppercase tracking-[0.11em] text-[var(--brand-muted)]">
-            {active + 1} / {safeImages.length}
+            {activeIndex + 1} / {safeImages.length}
           </p>
           <div className="flex items-center gap-1.5">
             {safeImages.map((image, index) => (
@@ -137,9 +132,9 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
                 key={`${image}-dot-${index}`}
                 type="button"
                 onClick={() => setActive(index)}
-                className={`h-2.5 rounded-full transition-all ${index === active ? "w-6 bg-[var(--brand-gold)]" : "w-2.5 bg-[#d8c9ae]"}`}
+                className={`h-2.5 rounded-full transition-all ${index === activeIndex ? "w-6 bg-[var(--brand-gold)]" : "w-2.5 bg-[#d8c9ae]"}`}
                 aria-label={`Go to image ${index + 1}`}
-                aria-current={index === active}
+                aria-current={index === activeIndex}
               />
             ))}
           </div>
@@ -152,12 +147,12 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
               key={`${image}-mobile-thumb-${index}`}
               onClick={() => setActive(index)}
               className={`aspect-square w-14 shrink-0 overflow-hidden rounded-lg border transition-all duration-200 ${
-                index === active
+                index === activeIndex
                   ? "border-[var(--brand-gold)] shadow-[0_8px_14px_rgba(176,139,70,0.2)]"
                   : "border-[#e3d8c1]"
               }`}
               aria-label={`Select image ${index + 1}`}
-              aria-pressed={index === active}
+              aria-pressed={index === activeIndex}
             >
               <div className="relative h-full w-full">
                 <OptimizedImage
@@ -182,12 +177,12 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
               key={image + index}
               onClick={() => setActive(index)}
               className={`aspect-square w-full overflow-hidden rounded-xl border transition-all duration-200 ${
-                index === active
+                index === activeIndex
                   ? "border-[var(--brand-gold)] shadow-[0_10px_20px_rgba(176,139,70,0.22)]"
                   : "border-[#e3d8c1] hover:border-[#d2bb8f]"
               }`}
               aria-label={`View image ${index + 1}`}
-              aria-pressed={index === active}
+              aria-pressed={index === activeIndex}
             >
               <div className="relative h-full w-full">
                 <OptimizedImage
@@ -207,11 +202,11 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
             type="button"
             className="w-full"
             onClick={() => setLightboxOpen(true)}
-            aria-label={`Open image ${active + 1} in full view`}
+            aria-label={`Open image ${activeIndex + 1} in full view`}
           >
             <AnimatePresence mode="wait">
               <motion.div
-                key={safeImages[active]}
+                key={safeImages[activeIndex]}
                 className="relative aspect-[4/5] w-full"
                 initial={{ opacity: 0.55, scale: 1.02 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -219,7 +214,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
                 transition={transition}
               >
                 <OptimizedImage
-                  src={safeImages[active]}
+                  src={safeImages[activeIndex]}
                   alt={alt}
                   fill
                   sizes="(max-width: 1280px) 70vw, 820px"
@@ -260,7 +255,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
             >
               <div className="flex items-center justify-between text-sm text-[#f4e9d2]">
                 <p>
-                  {active + 1} / {safeImages.length}
+                  {activeIndex + 1} / {safeImages.length}
                 </p>
                 <button
                   type="button"
@@ -275,7 +270,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
                 <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-[#8a7b58] bg-[#1d1811]">
                   <div className="relative aspect-[4/5] w-full">
                     <OptimizedImage
-                      src={safeImages[active]}
+                      src={safeImages[activeIndex]}
                       alt={alt}
                       fill
                       sizes="(max-width: 1280px) 90vw, 980px"

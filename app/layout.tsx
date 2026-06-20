@@ -3,8 +3,6 @@ import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
 import { RootChrome } from "@/components/layout/RootChrome";
 import { ReactQueryProvider } from "@/src/providers/ReactQueryProvider";
-import { getServerServices } from "@/src/services/server";
-import { mapCategoryToUiCategory } from "@/src/utils/uiMappers";
 
 const heading = Cormorant_Garamond({
   variable: "--font-heading",
@@ -28,21 +26,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let navCategories: ReturnType<typeof mapCategoryToUiCategory>[] = [];
-
-  try {
-    const { categoryService } = await getServerServices();
-    const categories = await categoryService.getCategories({ activeOnly: true });
-    navCategories = categories.map(mapCategoryToUiCategory);
-  } catch {
-    navCategories = [];
-  }
-
   return (
     <html lang="en" className={`${heading.variable} ${body.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <ReactQueryProvider>
-          <RootChrome categories={navCategories}>{children}</RootChrome>
+          <RootChrome>{children}</RootChrome>
         </ReactQueryProvider>
       </body>
     </html>
