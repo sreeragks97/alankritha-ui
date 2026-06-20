@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { OptimizedImage } from "@/components/ui/image";
-import { formatCurrency, generateWhatsAppUrl } from "@/lib/whatsapp";
+import { formatCurrency, generateLeadRedirectUrl } from "@/lib/whatsapp";
 import type { Product } from "@/types/product";
 
 interface ProductCardProps {
@@ -8,12 +8,13 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const productLink = `https://example.com/product/${product.slug}`;
-  const whatsappHref = generateWhatsAppUrl({
+  const whatsappHref = generateLeadRedirectUrl({
+    productId: product.id,
     productName: product.name,
     productCode: product.code,
     price: product.price,
-    productLink,
+    productSlug: product.slug,
+    source: "product-card",
   });
 
   return (

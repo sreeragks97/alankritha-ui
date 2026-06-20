@@ -1,22 +1,29 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ConfirmationDialog } from "@/components/admin/ui/ConfirmationDialog";
 import { DataTable } from "@/components/admin/ui/DataTable";
 import { Modal } from "@/components/admin/ui/Modal";
 import { SearchBar } from "@/components/admin/ui/SearchBar";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
+import { ToastNotification } from "@/components/admin/ui/ToastNotification";
 import { OptimizedImage } from "@/components/ui/image";
 import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { EmptyCategories, GenericErrorState } from "@/components/ui/states";
-import { adminRepository } from "@/lib/admin/repository";
-import { toSlug } from "@/lib/admin/selectors";
+import { useToast } from "@/hooks/useToast";
+import { useCategories, useCreateCategory, useDeleteCategory, useUpdateCategory } from "@/src/hooks/useCategories";
+import { mapCategoryToAdminCategory } from "@/src/utils/adminMappers";
+import { toSlug } from "@/utils/slug";
 import type { AdminCategory } from "@/types/admin";
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [hasLoadError, setHasLoadError] = useState(false);
+  const { toasts, showToast, removeToast } = useToast();
+
+  const categoriesQuery = useCategories();
+  const createCategoryMutation = useCreateCategory();
+  const updateCategoryMutation = useUpdateCategory();
+  const deleteCategoryMutation = useDeleteCategory();
+
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<AdminCategory | null>(null);
@@ -24,13 +31,10 @@ export default function CategoriesPage() {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
 
-  useEffect(() => {
-    void adminRepository
-      .getCategories()
-      .then(setCategories)
-      .catch(() => setHasLoadError(true))
-      .finally(() => setLoading(false));
-  }, []);
+  const categories = useMemo(
+    () => (categoriesQuery.data ?? []).map((category) => mapCategoryToAdminCategory(category)),
+    [categoriesQuery.data],
+  );
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -38,6 +42,9 @@ export default function CategoriesPage() {
       (item) => q.length === 0 || item.name.toLowerCase().includes(q) || item.slug.toLowerCase().includes(q),
     );
   }, [categories, search]);
+
+  const loading = categoriesQuery.isLoading && !categoriesQuery.data;
+  const hasLoadError = categoriesQuery.isError;
 
   const openAdd = () => {
     setEditing(null);
@@ -53,36 +60,49 @@ export default function CategoriesPage() {
     setModalOpen(true);
   };
 
-  const save = () => {
+  const save = async () => {
     if (!name.trim()) return;
 
-    if (editing) {
-      setCategories((prev) =>
-        prev.map((item) =>
-          item.id === editing.id
-            ? {
-                ...item,
-                name,
-                slug: slug || toSlug(name),
-              }
-            : item,
-        ),
-      );
-    } else {
-      setCategories((prev) => [
-        {
-          id: `cat_${Date.now()}`,
-          name,
-          slug: slug || toSlug(name),
-          bannerImage: "/images/admin/category-default.jpg",
-          productCount: 0,
-          status: "active",
-        },
-        ...prev,
-      ]);
-    }
+    const nextSlug = slug || toSlug(name);
 
-    setModalOpen(false);
+    try {
+      if (editing) {
+        await updateCategoryMutation.mutateAsync({
+          id: editing.id,
+          payload: {
+            name: name.trim(),
+            slug: nextSlug,
+            active: editing.status === "active",
+          },
+        });
+
+        showToast({
+          title: "Category updated",
+          description: `${name.trim()} has been saved.`,
+          tone: "success",
+        });
+      } else {
+        await createCategoryMutation.mutateAsync({
+          name: name.trim(),
+          slug: nextSlug,
+          active: true,
+        });
+
+        showToast({
+          title: "Category created",
+          description: `${name.trim()} has been added.`,
+          tone: "success",
+        });
+      }
+
+      setModalOpen(false);
+    } catch (error) {
+      showToast({
+        title: "Unable to save category",
+        description: error instanceof Error ? error.message : "Please try again.",
+        tone: "error",
+      });
+    }
   };
 
   if (loading) {
@@ -97,7 +117,7 @@ export default function CategoriesPage() {
   }
 
   if (hasLoadError) {
-    return <GenericErrorState onRetry={() => window.location.reload()} />;
+    return <GenericErrorState onRetry={() => categoriesQuery.refetch()} />;
   }
 
   if (filtered.length === 0) {
@@ -181,6 +201,7 @@ export default function CategoriesPage() {
             <button
               type="button"
               onClick={save}
+              disabled={createCategoryMutation.isPending || updateCategoryMutation.isPending}
               className="inline-flex min-h-11 items-center rounded-lg bg-[var(--brand-gold)] px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--brand-gold-deep)]"
             >
               Save
@@ -214,11 +235,32 @@ export default function CategoriesPage() {
         message={`Are you sure you want to remove ${pendingDelete?.name ?? "this category"}?`}
         onCancel={() => setPendingDelete(null)}
         onConfirm={() => {
-          if (!pendingDelete) return;
-          setCategories((prev) => prev.filter((item) => item.id !== pendingDelete.id));
-          setPendingDelete(null);
+          if (!pendingDelete) {
+            return;
+          }
+
+          void (async () => {
+            try {
+              await deleteCategoryMutation.mutateAsync(pendingDelete.id);
+              showToast({
+                title: "Category deleted",
+                description: `${pendingDelete.name} has been removed.`,
+                tone: "success",
+              });
+            } catch (error) {
+              showToast({
+                title: "Unable to delete category",
+                description: error instanceof Error ? error.message : "Please try again.",
+                tone: "error",
+              });
+            } finally {
+              setPendingDelete(null);
+            }
+          })();
         }}
       />
+
+      <ToastNotification items={toasts} onDismiss={removeToast} />
     </div>
   );
 }

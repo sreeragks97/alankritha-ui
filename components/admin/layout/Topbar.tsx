@@ -1,16 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/admin/layout/Breadcrumbs";
+import { useLogout } from "@/src/hooks/useAuth";
 
 interface TopbarProps {
   onOpenMenu: () => void;
 }
 
 export function Topbar({ onOpenMenu }: TopbarProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const logoutMutation = useLogout();
   const menuTransition = { duration: 0.2, ease: [0.22, 1, 0.36, 1] as const };
+
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+    } finally {
+      router.replace("/admin/login");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-20 border-b border-[#e8dcc3] bg-[#fff9ef]/90 backdrop-blur-lg">
@@ -58,7 +70,12 @@ export function Topbar({ onOpenMenu }: TopbarProps) {
                   <button type="button" className="w-full rounded-lg px-3 py-2 text-left hover:bg-[#f6efde]" role="menuitem">
                     Preferences
                   </button>
-                  <button type="button" className="w-full rounded-lg px-3 py-2 text-left text-[#9d3f2d] hover:bg-[#fceee9]" role="menuitem">
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full rounded-lg px-3 py-2 text-left text-[#9d3f2d] hover:bg-[#fceee9]"
+                    role="menuitem"
+                  >
                     Sign Out
                   </button>
                 </motion.div>

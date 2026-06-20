@@ -10,7 +10,7 @@ const navItems = [
   { href: "/admin/categories", label: "Categories" },
   { href: "/admin/banners", label: "Banners" },
   { href: "/admin/media-library", label: "Media Library" },
-  { href: "/admin/whatsapp-leads", label: "WhatsApp Leads" },
+  { href: "/admin/leads", label: "WhatsApp Leads" },
   { href: "/admin/settings", label: "Settings" },
 ];
 

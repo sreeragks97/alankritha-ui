@@ -50,6 +50,7 @@ export interface MediaAsset {
   sizeKb: number;
   type: "image";
   uploadedAt: string;
+  publicId?: string;
 }
 
 export interface WhatsAppLead {

@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { SectionHeader } from "@/components/common/SectionHeader";
 import { ProductGallery } from "@/components/product/ProductGallery";
-import { formatCurrency, generateWhatsAppUrl } from "@/lib/whatsapp";
-import { getProductBySlug, getRelatedProducts } from "@/lib/data";
+import { formatCurrency, generateLeadRedirectUrl } from "@/lib/whatsapp";
+import { getServerServices } from "@/src/services/server";
+import { mapProductToUiProduct } from "@/src/utils/uiMappers";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -11,20 +12,32 @@ interface ProductPageProps {
 
 export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const { productService } = await getServerServices();
+  const productRow = await productService.getProductBySlug(slug);
 
-  if (!product) {
+  if (!productRow) {
     notFound();
   }
 
-  const whatsappHref = generateWhatsAppUrl({
+  const product = mapProductToUiProduct(productRow);
+
+  const relatedRows = productRow.category?.slug
+    ? await productService.getProductsByCategory(productRow.category.slug, 1, 20)
+    : { items: [] };
+
+  const related = relatedRows.items
+    .filter((item) => item.id !== productRow.id)
+    .slice(0, 4)
+    .map(mapProductToUiProduct);
+
+  const whatsappHref = generateLeadRedirectUrl({
+    productId: product.id,
     productName: product.name,
     productCode: product.code,
     price: product.price,
-    productLink: `https://example.com/product/${product.slug}`,
+    productSlug: product.slug,
+    source: "product-detail",
   });
-
-  const related = getRelatedProducts(product);
 
   return (
     <div className="container-shell py-8 sm:py-10 md:py-12">

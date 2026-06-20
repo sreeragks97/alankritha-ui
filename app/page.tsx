@@ -4,26 +4,51 @@ import { OptimizedImage } from "@/components/ui/image";
 import { CategoryCard } from "@/components/common/CategoryCard";
 import { SectionHeader } from "@/components/common/SectionHeader";
 import { ProductCard } from "@/components/catalog/ProductCard";
-import { banners, categories, products } from "@/lib/data";
+import { getServerServices } from "@/src/services/server";
+import { mapBannerToUiBanner, mapCategoryToUiCategory, mapProductToUiProduct } from "@/src/utils/uiMappers";
 
-export default function Home() {
+export default async function Home() {
+  let banners = [] as ReturnType<typeof mapBannerToUiBanner>[];
+  let categories = [] as ReturnType<typeof mapCategoryToUiCategory>[];
+  let products = [] as ReturnType<typeof mapProductToUiProduct>[];
+
+  try {
+    const { bannerService, categoryService, productService } = await getServerServices();
+    const [bannerRows, categoryRows, productRows] = await Promise.all([
+      bannerService.getActiveBanners(),
+      categoryService.getCategories({ activeOnly: true }),
+      productService.getProducts({ page: 1, limit: 48, activeOnly: true }),
+    ]);
+
+    banners = bannerRows.map(mapBannerToUiBanner);
+    categories = categoryRows.map(mapCategoryToUiCategory);
+    products = productRows.items.map(mapProductToUiProduct);
+  } catch {
+    banners = [];
+    categories = [];
+    products = [];
+  }
+
   const featured = products.filter((product) => product.isFeatured).slice(0, 4);
   const newArrivals = [...products]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 4);
+  const previewItems = products.slice(0, 3);
 
   return (
     <div className="container-shell space-y-12 py-6 sm:space-y-16 sm:py-10 md:space-y-20">
-      <section className="animate-fade-up section-shell-tight">
-        <Banner
-          title={banners[0].title}
-          subtitle={banners[0].subtitle}
-          image={banners[0].image}
-          ctaText={banners[0].ctaText}
-          ctaHref={banners[0].ctaHref}
-          priority
-        />
-      </section>
+      {banners[0] ? (
+        <section className="animate-fade-up section-shell-tight">
+          <Banner
+            title={banners[0].title}
+            subtitle={banners[0].subtitle}
+            image={banners[0].image}
+            ctaText={banners[0].ctaText}
+            ctaHref={banners[0].ctaHref}
+            priority
+          />
+        </section>
+      ) : null}
 
       <section className="section-shell-tight">
         <SectionHeader
@@ -60,15 +85,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-shell-tight">
-        <Banner
-          title={banners[1].title}
-          subtitle={banners[1].subtitle}
-          image={banners[1].image}
-          ctaText={banners[1].ctaText}
-          ctaHref={banners[1].ctaHref}
-        />
-      </section>
+      {banners[1] ? (
+        <section className="section-shell-tight">
+          <Banner
+            title={banners[1].title}
+            subtitle={banners[1].subtitle}
+            image={banners[1].image}
+            ctaText={banners[1].ctaText}
+            ctaHref={banners[1].ctaHref}
+          />
+        </section>
+      ) : null}
 
       <section className="card-luxury section-shell-tight px-4 py-6 sm:px-8 sm:py-8">
         <SectionHeader
@@ -82,7 +109,7 @@ export default function Home() {
             <div key={label} className="overflow-hidden rounded-2xl bg-[#efe4cd]">
               <div className="relative aspect-[3/4]">
                 <OptimizedImage
-                  src={products[index].images[0]}
+                  src={previewItems[index]?.images?.[0]}
                   alt={label}
                   fill
                   sizes="(max-width: 640px) 50vw, 33vw"

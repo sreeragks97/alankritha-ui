@@ -1,31 +1,52 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ProductForm } from "@/components/admin/product/ProductForm";
 import { EmptyState } from "@/components/admin/ui/EmptyState";
 import { ToastNotification } from "@/components/admin/ui/ToastNotification";
 import { PageLoader, Shimmer } from "@/components/ui/loading";
+import { GenericErrorState } from "@/components/ui/states";
 import { useToast } from "@/hooks/useToast";
-import { adminRepository } from "@/lib/admin/repository";
-import type { AdminCategory, AdminProduct } from "@/types/admin";
+import { useCategories } from "@/src/hooks/useCategories";
+import { useProductById, useUpdateProduct } from "@/src/hooks/useProducts";
+import {
+  mapAdminProductToProductUpdateInput,
+  mapCategoryToAdminCategory,
+  mapProductToAdminProduct,
+} from "@/src/utils/adminMappers";
 
 export default function EditProductPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const { toasts, showToast, removeToast } = useToast();
 
-  const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [products, setProducts] = useState<AdminProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+  const categoriesQuery = useCategories();
+  const productQuery = useProductById(params.id);
+  const updateProductMutation = useUpdateProduct();
 
-  useEffect(() => {
-    void Promise.all([adminRepository.getCategories().then(setCategories), adminRepository.getProducts().then(setProducts)]).finally(() =>
-      setLoading(false),
+  const categories = useMemo(
+    () => (categoriesQuery.data ?? []).map(mapCategoryToAdminCategory),
+    [categoriesQuery.data],
+  );
+  const product = useMemo(
+    () => (productQuery.data ? mapProductToAdminProduct(productQuery.data) : undefined),
+    [productQuery.data],
+  );
+
+  const loading =
+    (categoriesQuery.isLoading && !categoriesQuery.data) ||
+    (productQuery.isLoading && !productQuery.data);
+
+  if (categoriesQuery.isError || productQuery.isError) {
+    return (
+      <GenericErrorState
+        onRetry={() => {
+          void Promise.all([categoriesQuery.refetch(), productQuery.refetch()]);
+        }}
+      />
     );
-  }, []);
-
-  const product = useMemo(() => products.find((item) => item.id === params.id), [products, params.id]);
+  }
 
   if (loading) {
     return (
@@ -39,9 +60,20 @@ export default function EditProductPage() {
     return (
       <EmptyState
         title="Product not found"
-        description="The selected product ID is not available in mock dataset."
+        description="The selected product could not be loaded."
         actionLabel="Back to products"
         onAction={() => router.push("/admin/products")}
+      />
+    );
+  }
+
+  if (categories.length === 0) {
+    return (
+      <EmptyState
+        title="No categories available"
+        description="Create at least one category before editing products."
+        actionLabel="Go to categories"
+        onAction={() => router.push("/admin/categories")}
       />
     );
   }
@@ -57,17 +89,32 @@ export default function EditProductPage() {
         mode="edit"
         categories={categories}
         initialProduct={product}
-        onSubmit={(payload, action) => {
-          showToast({
-            title: action === "publish" ? "Product updated" : "Draft updated",
-            description: `${payload.name} changes are saved in mock state.`,
-            tone: "success",
-          });
-          window.setTimeout(() => {
-            router.push("/admin/products");
-          }, 500);
+        onSubmit={async (payload, action) => {
+          try {
+            await updateProductMutation.mutateAsync({
+              id: product.id,
+              payload: mapAdminProductToProductUpdateInput(payload),
+            });
+
+            showToast({
+              title: action === "publish" ? "Product updated" : "Draft updated",
+              description: `${payload.name} has been saved.`,
+              tone: "success",
+            });
+
+            window.setTimeout(() => {
+              router.push("/admin/products");
+            }, 500);
+          } catch (error) {
+            showToast({
+              title: "Could not update product",
+              description: error instanceof Error ? error.message : "Please try again.",
+              tone: "error",
+            });
+          }
         }}
         onCancel={() => router.push("/admin/products")}
+        isSubmitting={updateProductMutation.isPending}
       />
       <ToastNotification items={toasts} onDismiss={removeToast} />
     </div>

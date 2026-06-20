@@ -9,8 +9,9 @@ interface ProductFormProps {
   mode: "create" | "edit";
   categories: AdminCategory[];
   initialProduct?: AdminProduct;
-  onSubmit: (payload: AdminProduct, action: "draft" | "publish") => void;
+  onSubmit: (payload: AdminProduct, action: "draft" | "publish") => void | Promise<void>;
   onCancel: () => void;
+  isSubmitting?: boolean;
 }
 
 function newDraft(categoryId: string, categoryName: string): AdminProduct {
@@ -35,7 +36,7 @@ function newDraft(categoryId: string, categoryName: string): AdminProduct {
   };
 }
 
-export function ProductForm({ mode, categories, initialProduct, onSubmit, onCancel }: ProductFormProps) {
+export function ProductForm({ mode, categories, initialProduct, onSubmit, onCancel, isSubmitting = false }: ProductFormProps) {
   const fallbackCategory = categories[0] ?? {
     id: "uncategorized",
     name: "Uncategorized",
@@ -89,7 +90,8 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
     return Object.keys(nextErrors).length === 0;
   };
 
-  const submit = (action: "draft" | "publish") => {
+  const submit = async (action: "draft" | "publish") => {
+    if (isSubmitting) return;
     if (!validate()) return;
     const tags = tagInput
       .split(",")
@@ -103,7 +105,8 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
       tags,
       status: nextStatus,
     };
-    onSubmit(payload, action);
+
+    await onSubmit(payload, action);
   };
 
   return (
@@ -111,7 +114,7 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
       className="space-y-6"
       onSubmit={(event) => {
         event.preventDefault();
-        submit("publish");
+        void submit("publish");
       }}
     >
       <section className="card-luxury rounded-2xl p-5 sm:p-6">
@@ -283,22 +286,27 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
         <button
           type="button"
           onClick={onCancel}
+          disabled={isSubmitting}
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[#e6d8bc] px-4 py-2 text-sm hover:bg-[#f8f0df] sm:flex-none"
         >
           Cancel
         </button>
         <button
           type="button"
-          onClick={() => submit("draft")}
+          onClick={() => {
+            void submit("draft");
+          }}
+          disabled={isSubmitting}
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[#dcc39d] px-4 py-2 text-sm font-semibold hover:bg-[#f8f0df] sm:flex-none"
         >
           Save Draft
         </button>
         <button
           type="submit"
+          disabled={isSubmitting}
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)] sm:flex-none"
         >
-          {mode === "create" ? "Publish" : "Update"}
+          {isSubmitting ? "Saving..." : mode === "create" ? "Publish" : "Update"}
         </button>
       </div>
     </form>

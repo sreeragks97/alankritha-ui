@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/admin/layout/Sidebar";
 import { Topbar } from "@/components/admin/layout/Topbar";
 import { Drawer } from "@/components/admin/ui/Drawer";
@@ -11,6 +12,11 @@ interface AdminShellProps {
 
 export function AdminShell({ children }: AdminShellProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const pathname = usePathname();
+
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
 
   return (
     <div className="min-h-screen bg-[radial-gradient(120%_80%_at_10%_0%,#fffdf8_0%,#f9f2e4_52%,#f4ead6_100%)]">

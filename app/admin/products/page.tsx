@@ -1,46 +1,111 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 import { DataTable } from "@/components/admin/ui/DataTable";
 import { Pagination } from "@/components/admin/ui/Pagination";
 import { SearchBar } from "@/components/admin/ui/SearchBar";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
+import { ToastNotification } from "@/components/admin/ui/ToastNotification";
 import { OptimizedImage } from "@/components/ui/image";
 import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { EmptyProducts, GenericErrorState } from "@/components/ui/states";
-import { adminRepository } from "@/lib/admin/repository";
-import { formatCurrency, queryProducts } from "@/lib/admin/selectors";
-import type { AdminCategory, AdminProduct, ProductStatus } from "@/types/admin";
+import { useToast } from "@/hooks/useToast";
+import { formatCurrency } from "@/utils/currency";
+import { useCategories } from "@/src/hooks/useCategories";
+import { useDeleteProduct, useProducts } from "@/src/hooks/useProducts";
+import { mapCategoryToAdminCategory, mapProductToAdminProduct } from "@/src/utils/adminMappers";
+import type { AdminProduct, ProductStatus } from "@/types/admin";
+
+const FALLBACK_THUMBNAIL =
+  "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=640&q=80";
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<AdminProduct[]>([]);
-  const [categories, setCategories] = useState<AdminCategory[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [hasLoadError, setHasLoadError] = useState(false);
+  const router = useRouter();
+  const { toasts, showToast, removeToast } = useToast();
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState<"all" | ProductStatus>("all");
   const [page, setPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  useEffect(() => {
-    void Promise.all([adminRepository.getProducts().then(setProducts), adminRepository.getCategories().then(setCategories)])
-      .catch(() => setHasLoadError(true))
-      .finally(() => setLoading(false));
-  }, []);
+  const categoriesQuery = useCategories();
+  const productsQuery = useProducts({
+    page,
+    limit: 5,
+    search: search.trim() || undefined,
+    category: category === "all" ? undefined : category,
+    active: status === "all" ? undefined : status === "active",
+  });
+  const deleteProductMutation = useDeleteProduct();
 
-  const result = useMemo(
-    () =>
-      queryProducts(products, {
-        search,
-        category,
-        status,
-        page,
-        pageSize: 5,
-      }),
-    [products, search, category, status, page],
+  const categories = useMemo(
+    () => (categoriesQuery.data ?? []).map(mapCategoryToAdminCategory),
+    [categoriesQuery.data],
   );
+
+  const result = useMemo(() => {
+    const items = (productsQuery.data?.items ?? []).map(mapProductToAdminProduct);
+
+    return {
+      items,
+      total: productsQuery.data?.total ?? 0,
+      totalPages: productsQuery.data?.totalPages ?? 1,
+      page: productsQuery.data?.page ?? page,
+    };
+  }, [page, productsQuery.data]);
+
+  const isLoading =
+    (productsQuery.isLoading && !productsQuery.data) ||
+    (categoriesQuery.isLoading && !categoriesQuery.data);
+
+  const hasLoadError = productsQuery.isError || categoriesQuery.isError;
+
+  const handleRowAction = async (item: AdminProduct, action: string) => {
+    if (action === "view") {
+      router.push(`/product/${item.slug}`);
+      return;
+    }
+
+    if (action === "edit") {
+      router.push(`/admin/products/${item.id}`);
+      return;
+    }
+
+    if (action === "duplicate") {
+      showToast({
+        title: "Duplicate action pending",
+        description: "Duplicate workflow will be wired in the next integration slice.",
+        tone: "info",
+      });
+      return;
+    }
+
+    if (action === "delete") {
+      const confirmed = window.confirm(`Delete \"${item.name}\"? This cannot be undone.`);
+      if (!confirmed) {
+        return;
+      }
+
+      try {
+        await deleteProductMutation.mutateAsync(item.id);
+        setSelectedIds((prev) => prev.filter((id) => id !== item.id));
+        showToast({
+          title: "Product deleted",
+          description: `${item.name} has been removed.`,
+          tone: "success",
+        });
+      } catch (error) {
+        showToast({
+          title: "Delete failed",
+          description: error instanceof Error ? error.message : "Unable to delete product.",
+          tone: "error",
+        });
+      }
+    }
+  };
 
   const toggleSelectAll = () => {
     if (selectedIds.length === result.items.length) {
@@ -54,7 +119,7 @@ export default function AdminProductsPage() {
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <PageLoader label="Loading products list">
         <div className="space-y-4">
@@ -66,10 +131,16 @@ export default function AdminProductsPage() {
   }
 
   if (hasLoadError) {
-    return <GenericErrorState onRetry={() => window.location.reload()} />;
+    return (
+      <GenericErrorState
+        onRetry={() => {
+          void Promise.all([productsQuery.refetch(), categoriesQuery.refetch()]);
+        }}
+      />
+    );
   }
 
-  if (products.length === 0) {
+  if (result.total === 0) {
     return <EmptyProducts onAction={() => window.location.assign("/admin/products/new")} />;
   }
 
@@ -98,7 +169,7 @@ export default function AdminProductsPage() {
             >
               <option value="all">All Categories</option>
               {categories.map((item) => (
-                <option key={item.id} value={item.id}>
+                <option key={item.id} value={item.slug}>
                   {item.name}
                 </option>
               ))}
@@ -161,7 +232,7 @@ export default function AdminProductsPage() {
                 <div className="flex items-center gap-3">
                   <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-[#f2e8d3]">
                     <OptimizedImage
-                      src={item.images[0]}
+                      src={item.images[0] ?? FALLBACK_THUMBNAIL}
                       alt={item.name}
                       fill
                       sizes="48px"
@@ -190,12 +261,22 @@ export default function AdminProductsPage() {
               title: "Actions",
               mobileTitle: "Quick Action",
               render: (item) => (
-                <select className="min-h-10 rounded-lg border border-[#e8dcc3] bg-white px-2 py-1 text-xs focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]" defaultValue="">
+                <select
+                  className="min-h-10 rounded-lg border border-[#e8dcc3] bg-white px-2 py-1 text-xs focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+                  defaultValue=""
+                  onChange={(event) => {
+                    const action = event.target.value;
+                    event.target.value = "";
+                    if (action) {
+                      void handleRowAction(item, action);
+                    }
+                  }}
+                >
                   <option value="" disabled>
                     Choose
                   </option>
                   <option value="view">View</option>
-                  <option value="edit">Edit ({item.id})</option>
+                  <option value="edit">Edit</option>
                   <option value="duplicate">Duplicate</option>
                   <option value="delete">Delete</option>
                 </select>
@@ -215,6 +296,7 @@ export default function AdminProductsPage() {
           }}
         />
       </section>
+      <ToastNotification items={toasts} onDismiss={removeToast} />
     </div>
   );
 }

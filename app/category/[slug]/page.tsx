@@ -5,8 +5,9 @@ import { ProductCard } from "@/components/catalog/ProductCard";
 import { SectionHeader } from "@/components/common/SectionHeader";
 import { composeCatalog } from "@/lib/catalog";
 import { PAGE_SIZE } from "@/lib/constants";
-import { categories, getCategoryBySlug, products } from "@/lib/data";
 import { paginate } from "@/lib/pagination";
+import { getServerServices } from "@/src/services/server";
+import { mapCategoryToUiCategory, mapProductToUiProduct } from "@/src/utils/uiMappers";
 import type { CatalogFilters, SortOption } from "@/types/catalog";
 
 interface CategoryPageProps {
@@ -25,7 +26,18 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const { slug } = await params;
   const query = await searchParams;
 
-  const category = getCategoryBySlug(slug);
+  const { categoryService, productService } = await getServerServices();
+
+  const [categoryRow, categoryRows, productRows] = await Promise.all([
+    categoryService.getCategoryBySlug(slug),
+    categoryService.getCategories({ activeOnly: true }),
+    productService.getProducts({ page: 1, limit: 500, activeOnly: true }),
+  ]);
+
+  const categories = categoryRows.map(mapCategoryToUiCategory);
+  const products = productRows.items.map(mapProductToUiProduct);
+  const category = categoryRow ? mapCategoryToUiCategory(categoryRow) : null;
+
   if (!category) {
     notFound();
   }

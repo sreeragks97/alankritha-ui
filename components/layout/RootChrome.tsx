@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFloatingButton } from "@/components/common/WhatsAppFloatingButton";
-import { categories } from "@/lib/data";
+import type { Category } from "@/types/product";
 
 interface RootChromeProps {
   children: ReactNode;
+  categories: Category[];
 }
 
-export function RootChrome({ children }: RootChromeProps) {
+export function RootChrome({ children, categories }: RootChromeProps) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
 
