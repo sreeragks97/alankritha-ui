@@ -28,6 +28,8 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   catalogue_heading: "Jewellery Catalogue",
   catalogue_subheading: "Browse our collection with filters by category, metal, occasion, and price.",
   offer_badge_label: "Special Offer",
+  footer_description: "Curated premium jewellery with heritage artistry and contemporary charm.",
+  footer_tagline: "Crafted for celebrations that become memories.",
   filter_search_enabled: true,
   filter_sort_enabled: true,
   filter_category_enabled: true,

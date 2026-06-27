@@ -23,6 +23,8 @@ interface FormState {
   catalogue_heading: string;
   catalogue_subheading: string;
   offer_badge_label: string;
+  footer_description: string;
+  footer_tagline: string;
   filter_search_enabled: boolean;
   filter_sort_enabled: boolean;
   filter_category_enabled: boolean;
@@ -63,6 +65,8 @@ function toForm(settings: SiteSettings): FormState {
     catalogue_heading: settings.catalogue_heading ?? "",
     catalogue_subheading: settings.catalogue_subheading ?? "",
     offer_badge_label: settings.offer_badge_label ?? "",
+    footer_description: settings.footer_description ?? "",
+    footer_tagline: settings.footer_tagline ?? "",
     filter_search_enabled: settings.filter_search_enabled,
     filter_sort_enabled: settings.filter_sort_enabled,
     filter_category_enabled: settings.filter_category_enabled,
@@ -160,6 +164,23 @@ function SettingsForm({ initial }: { initial: SiteSettings }) {
           <label className="space-y-1 text-sm">
             <span>Body</span>
             <textarea value={form.contact_body} onChange={(e) => setField("contact_body", e.target.value)} className={textareaClass} rows={4} />
+          </label>
+        </div>
+      </section>
+
+      <section className="card-luxury rounded-2xl p-5">
+        <p className="font-heading text-3xl">Footer</p>
+        <p className="mt-1 text-sm text-[var(--brand-muted)]">
+          Social links shown in the footer come from the Contact &amp; Social section above.
+        </p>
+        <div className="mt-4 grid gap-4">
+          <label className="space-y-1 text-sm">
+            <span>Description</span>
+            <textarea value={form.footer_description} onChange={(e) => setField("footer_description", e.target.value)} className={textareaClass} rows={3} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Tagline</span>
+            <input value={form.footer_tagline} onChange={(e) => setField("footer_tagline", e.target.value)} className={inputClass} />
           </label>
         </div>
       </section>

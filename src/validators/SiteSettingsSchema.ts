@@ -26,6 +26,8 @@ export const siteSettingsSchema = z.object({
   catalogue_heading: optionalText,
   catalogue_subheading: optionalText,
   offer_badge_label: optionalText,
+  footer_description: optionalText,
+  footer_tagline: optionalText,
   filter_search_enabled: z.boolean().optional(),
   filter_sort_enabled: z.boolean().optional(),
   filter_category_enabled: z.boolean().optional(),

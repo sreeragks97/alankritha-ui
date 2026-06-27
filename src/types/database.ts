@@ -225,6 +225,8 @@ export interface Database {
           catalogue_heading: string | null;
           catalogue_subheading: string | null;
           offer_badge_label: string | null;
+          footer_description: string | null;
+          footer_tagline: string | null;
           filter_search_enabled: boolean;
           filter_sort_enabled: boolean;
           filter_category_enabled: boolean;
@@ -251,6 +253,8 @@ export interface Database {
           catalogue_heading?: string | null;
           catalogue_subheading?: string | null;
           offer_badge_label?: string | null;
+          footer_description?: string | null;
+          footer_tagline?: string | null;
           filter_search_enabled?: boolean;
           filter_sort_enabled?: boolean;
           filter_category_enabled?: boolean;
@@ -277,6 +281,8 @@ export interface Database {
           catalogue_heading?: string | null;
           catalogue_subheading?: string | null;
           offer_badge_label?: string | null;
+          footer_description?: string | null;
+          footer_tagline?: string | null;
           filter_search_enabled?: boolean;
           filter_sort_enabled?: boolean;
           filter_category_enabled?: boolean;
