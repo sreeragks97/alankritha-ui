@@ -185,6 +185,7 @@ export interface Database {
           id: string;
           user_id: string;
           name: string | null;
+          phone: string | null;
           role: "admin" | "super_admin";
           created_at: string;
         };
@@ -192,6 +193,7 @@ export interface Database {
           id?: string;
           user_id: string;
           name?: string | null;
+          phone?: string | null;
           role: "admin" | "super_admin";
           created_at?: string;
         };
@@ -199,6 +201,7 @@ export interface Database {
           id?: string;
           user_id?: string;
           name?: string | null;
+          phone?: string | null;
           role?: "admin" | "super_admin";
           created_at?: string;
         };

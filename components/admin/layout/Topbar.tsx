@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/admin/layout/Breadcrumbs";
-import { useLogout } from "@/src/hooks/useAuth";
+import { useAuthProfile, useLogout } from "@/src/hooks/useAuth";
 
 interface TopbarProps {
   onOpenMenu: () => void;
@@ -14,9 +15,26 @@ export function Topbar({ onOpenMenu }: TopbarProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const logoutMutation = useLogout();
+  const profileQuery = useAuthProfile();
   const menuTransition = { duration: 0.2, ease: [0.22, 1, 0.36, 1] as const };
 
+  const displayName = profileQuery.data?.name || "Account";
+
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   const handleLogout = async () => {
+    setOpen(false);
     try {
       await logoutMutation.mutateAsync();
     } finally {
@@ -42,7 +60,6 @@ export function Topbar({ onOpenMenu }: TopbarProps) {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden rounded-xl border border-[#e8dcc3] bg-white px-3 py-2 text-sm text-[var(--brand-muted)] sm:block">Notifications 3</div>
           <div className="relative">
             <button
               type="button"
@@ -51,34 +68,44 @@ export function Topbar({ onOpenMenu }: TopbarProps) {
               aria-expanded={open}
               aria-controls="admin-user-menu"
             >
-              Ananya S
+              {displayName}
             </button>
             <AnimatePresence>
               {open ? (
-                <motion.div
-                  id="admin-user-menu"
-                  className="absolute right-0 mt-2 w-44 rounded-xl border border-[#e8dcc3] bg-white p-2 text-sm shadow-lg"
-                  role="menu"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={menuTransition}
-                >
-                  <button type="button" className="w-full rounded-lg px-3 py-2 text-left hover:bg-[#f6efde]" role="menuitem">
-                    My Profile
-                  </button>
-                  <button type="button" className="w-full rounded-lg px-3 py-2 text-left hover:bg-[#f6efde]" role="menuitem">
-                    Preferences
-                  </button>
+                <>
                   <button
                     type="button"
-                    onClick={handleLogout}
-                    className="w-full rounded-lg px-3 py-2 text-left text-[#9d3f2d] hover:bg-[#fceee9]"
-                    role="menuitem"
+                    aria-label="Close menu"
+                    className="fixed inset-0 z-30 cursor-default"
+                    onClick={() => setOpen(false)}
+                  />
+                  <motion.div
+                    id="admin-user-menu"
+                    className="absolute right-0 z-40 mt-2 w-44 rounded-xl border border-[#e8dcc3] bg-white p-2 text-sm shadow-lg"
+                    role="menu"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={menuTransition}
                   >
-                    Sign Out
-                  </button>
-                </motion.div>
+                    <Link
+                      href="/admin/profile"
+                      onClick={() => setOpen(false)}
+                      className="block w-full rounded-lg px-3 py-2 text-left hover:bg-[#f6efde]"
+                      role="menuitem"
+                    >
+                      My Profile
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="w-full rounded-lg px-3 py-2 text-left text-[#9d3f2d] hover:bg-[#fceee9]"
+                      role="menuitem"
+                    >
+                      Sign Out
+                    </button>
+                  </motion.div>
+                </>
               ) : null}
             </AnimatePresence>
           </div>

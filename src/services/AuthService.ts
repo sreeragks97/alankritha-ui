@@ -3,6 +3,19 @@ import { AuthRepository } from "@/src/repositories/AuthRepository";
 import type { Database, Profile } from "@/src/types/database";
 import { AppError } from "@/src/utils/AppError";
 import { loginSchema, type LoginInput } from "@/src/validators/AuthSchema";
+import {
+  emailSchema,
+  passwordSchema,
+  profileSchema,
+  type EmailInput,
+  type PasswordInput,
+  type ProfileInput,
+} from "@/src/validators/ProfileSchema";
+
+export interface Account {
+  email: string | null;
+  profile: Profile | null;
+}
 
 export class AuthService {
   private readonly repository: AuthRepository;
@@ -60,6 +73,42 @@ export class AuthService {
     }
 
     return this.repository.getProfile(user.id);
+  }
+
+  async getAccount(): Promise<Account> {
+    const user = await this.repository.getCurrentUser();
+
+    if (!user) {
+      return { email: null, profile: null };
+    }
+
+    const profile = await this.repository.getProfile(user.id);
+
+    return { email: user.email ?? null, profile };
+  }
+
+  async updateProfile(input: ProfileInput): Promise<Profile> {
+    const parsed = profileSchema.parse(input);
+    const user = await this.repository.getCurrentUser();
+
+    if (!user) {
+      throw new AppError("Not authenticated", { code: "AUTH_REQUIRED", status: 401 });
+    }
+
+    return this.repository.updateProfile(user.id, {
+      name: parsed.name,
+      phone: parsed.phone?.trim() ? parsed.phone.trim() : null,
+    });
+  }
+
+  async updateEmail(input: EmailInput): Promise<void> {
+    const parsed = emailSchema.parse(input);
+    await this.repository.updateEmail(parsed.email);
+  }
+
+  async updatePassword(input: PasswordInput): Promise<void> {
+    const parsed = passwordSchema.parse(input);
+    await this.repository.updatePassword(parsed.password);
   }
 
   async requireAdminProfile(): Promise<Profile> {
