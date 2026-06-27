@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 let lockCount = 0;
 let previousOverflow = "";
@@ -31,16 +31,16 @@ export function useScrollLock(locked: boolean): void {
   }, [locked]);
 }
 
+const subscribe = () => () => {};
+
 /**
  * Returns true only after the component has mounted on the client. Useful to
  * guard `createPortal`, which needs `document` and must not run during SSR.
  */
 export function useMounted(): boolean {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  return mounted;
+  return useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
 }
