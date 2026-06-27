@@ -7,4 +7,5 @@ export const queryKeys = {
   leads: (params?: unknown) => ["leads", params ?? {}] as const,
   mediaAssets: () => ["media-assets"] as const,
   authProfile: () => ["auth-profile"] as const,
+  siteSettings: () => ["site-settings"] as const,
 };

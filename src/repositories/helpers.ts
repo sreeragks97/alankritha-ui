@@ -6,7 +6,9 @@ export function assertNoError(error: PostgrestError | null, message: string, cod
     return;
   }
 
-  throw new AppError(message, {
+  const detail = [error.code, error.message, error.hint].filter(Boolean).join(" | ");
+
+  throw new AppError(detail ? `${message} (${detail})` : message, {
     code,
     status,
     cause: error,

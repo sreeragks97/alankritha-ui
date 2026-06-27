@@ -201,6 +201,63 @@ export interface Database {
         };
         Relationships: [];
       };
+      site_settings: {
+        Row: {
+          id: number;
+          whatsapp_number: string | null;
+          facebook_url: string | null;
+          instagram_url: string | null;
+          email: string | null;
+          about_eyebrow: string | null;
+          about_heading: string | null;
+          about_body: string | null;
+          contact_eyebrow: string | null;
+          contact_heading: string | null;
+          contact_body: string | null;
+          contact_phone: string | null;
+          contact_address: string | null;
+          catalogue_heading: string | null;
+          catalogue_subheading: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          whatsapp_number?: string | null;
+          facebook_url?: string | null;
+          instagram_url?: string | null;
+          email?: string | null;
+          about_eyebrow?: string | null;
+          about_heading?: string | null;
+          about_body?: string | null;
+          contact_eyebrow?: string | null;
+          contact_heading?: string | null;
+          contact_body?: string | null;
+          contact_phone?: string | null;
+          contact_address?: string | null;
+          catalogue_heading?: string | null;
+          catalogue_subheading?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          whatsapp_number?: string | null;
+          facebook_url?: string | null;
+          instagram_url?: string | null;
+          email?: string | null;
+          about_eyebrow?: string | null;
+          about_heading?: string | null;
+          about_body?: string | null;
+          contact_eyebrow?: string | null;
+          contact_heading?: string | null;
+          contact_body?: string | null;
+          contact_phone?: string | null;
+          contact_address?: string | null;
+          catalogue_heading?: string | null;
+          catalogue_subheading?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -221,6 +278,7 @@ export type ProductImage = TableRow<"product_images">;
 export type Banner = TableRow<"banners">;
 export type WhatsAppLead = TableRow<"whatsapp_leads">;
 export type Profile = TableRow<"profiles">;
+export type SiteSettings = TableRow<"site_settings">;
 
 export interface ProductWithRelations extends Product {
   category: Category | null;

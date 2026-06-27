@@ -1,146 +1,139 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ToastNotification } from "@/components/admin/ui/ToastNotification";
 import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { useToast } from "@/hooks/useToast";
-import { adminRepository } from "@/lib/admin/repository";
-import type { AdminSettings } from "@/types/admin";
+import { useSiteSettings, useUpdateSiteSettings } from "@/src/hooks/useSiteSettings";
+import type { SiteSettings } from "@/src/types/database";
+import type { SiteSettingsInput } from "@/src/validators/SiteSettingsSchema";
 
-const fallback: AdminSettings = {
-  storeName: "",
-  supportEmail: "",
-  whatsappNumber: "",
-  instagram: "",
-  facebook: "",
-  metaTitle: "",
-  metaDescription: "",
-  homepageHeroTitle: "",
-};
+type FormState = Record<keyof SiteSettingsInput, string>;
 
-export default function SettingsPage() {
-  const [settings, setSettings] = useState<AdminSettings>(fallback);
-  const [loading, setLoading] = useState(true);
-  const { toasts, showToast, removeToast } = useToast();
+const inputClass =
+  "min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]";
+const textareaClass = "w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]";
 
-  useEffect(() => {
-    void adminRepository
-      .getSettings()
-      .then(setSettings)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const setField = <K extends keyof AdminSettings>(key: K, value: AdminSettings[K]) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
+function toForm(settings: SiteSettings): FormState {
+  return {
+    whatsapp_number: settings.whatsapp_number ?? "",
+    facebook_url: settings.facebook_url ?? "",
+    instagram_url: settings.instagram_url ?? "",
+    email: settings.email ?? "",
+    about_eyebrow: settings.about_eyebrow ?? "",
+    about_heading: settings.about_heading ?? "",
+    about_body: settings.about_body ?? "",
+    contact_eyebrow: settings.contact_eyebrow ?? "",
+    contact_heading: settings.contact_heading ?? "",
+    contact_body: settings.contact_body ?? "",
+    contact_phone: settings.contact_phone ?? "",
+    contact_address: settings.contact_address ?? "",
+    catalogue_heading: settings.catalogue_heading ?? "",
+    catalogue_subheading: settings.catalogue_subheading ?? "",
   };
+}
 
-  if (loading) {
-    return (
-      <PageLoader label="Loading settings">
-        <div className="space-y-4">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Shimmer key={index} className="card-luxury h-52 rounded-2xl" />
-          ))}
-        </div>
-      </PageLoader>
-    );
-  }
+function SettingsForm({ initial }: { initial: SiteSettings }) {
+  const updateSettings = useUpdateSiteSettings();
+  const { toasts, showToast, removeToast } = useToast();
+  const [form, setForm] = useState<FormState>(() => toForm(initial));
+
+  const setField = (key: keyof FormState, value: string) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
   return (
     <form
       className="space-y-4"
       onSubmit={(event) => {
         event.preventDefault();
-        showToast({ title: "Settings updated", description: "Mock settings saved locally for this session." });
+        updateSettings.mutate(form, {
+          onSuccess: () => showToast({ title: "Settings saved", description: "Your changes are now live." }),
+          onError: (error) =>
+            showToast({
+              title: "Could not save settings",
+              description: error instanceof Error ? error.message : "Please try again.",
+            }),
+        });
       }}
     >
       <section className="card-luxury rounded-2xl p-5">
-        <p className="font-heading text-3xl">Store Information</p>
+        <p className="font-heading text-3xl">Contact &amp; Social</p>
+        <p className="mt-1 text-sm text-[var(--brand-muted)]">Shown on the About and Contact pages.</p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <label className="space-y-1 text-sm">
-            <span>Store Name</span>
-            <input
-              value={settings.storeName}
-              onChange={(event) => setField("storeName", event.target.value)}
-              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-            />
-          </label>
-          <label className="space-y-1 text-sm">
-            <span>Support Email</span>
-            <input
-              type="email"
-              value={settings.supportEmail}
-              onChange={(event) => setField("supportEmail", event.target.value)}
-              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-            />
-          </label>
-        </div>
-      </section>
-
-      <section className="card-luxury rounded-2xl p-5">
-        <p className="font-heading text-3xl">WhatsApp and Social Links</p>
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
           <label className="space-y-1 text-sm">
             <span>WhatsApp Number</span>
-            <input
-              type="tel"
-              value={settings.whatsappNumber}
-              onChange={(event) => setField("whatsappNumber", event.target.value)}
-              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-            />
+            <input value={form.whatsapp_number} onChange={(e) => setField("whatsapp_number", e.target.value)} className={inputClass} placeholder="919876543210" />
           </label>
           <label className="space-y-1 text-sm">
-            <span>Instagram</span>
-            <input
-              value={settings.instagram}
-              onChange={(event) => setField("instagram", event.target.value)}
-              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-            />
+            <span>Email</span>
+            <input type="email" value={form.email} onChange={(e) => setField("email", e.target.value)} className={inputClass} />
           </label>
           <label className="space-y-1 text-sm">
-            <span>Facebook</span>
-            <input
-              value={settings.facebook}
-              onChange={(event) => setField("facebook", event.target.value)}
-              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-            />
+            <span>Facebook URL</span>
+            <input value={form.facebook_url} onChange={(e) => setField("facebook_url", e.target.value)} className={inputClass} placeholder="https://facebook.com/..." />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Instagram URL</span>
+            <input value={form.instagram_url} onChange={(e) => setField("instagram_url", e.target.value)} className={inputClass} placeholder="https://instagram.com/..." />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Contact Phone</span>
+            <input type="tel" value={form.contact_phone} onChange={(e) => setField("contact_phone", e.target.value)} className={inputClass} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Contact Address</span>
+            <input value={form.contact_address} onChange={(e) => setField("contact_address", e.target.value)} className={inputClass} />
           </label>
         </div>
       </section>
 
       <section className="card-luxury rounded-2xl p-5">
-        <p className="font-heading text-3xl">SEO Settings</p>
+        <p className="font-heading text-3xl">About Page</p>
         <div className="mt-4 grid gap-4">
           <label className="space-y-1 text-sm">
-            <span>Meta Title</span>
-            <input
-              value={settings.metaTitle}
-              onChange={(event) => setField("metaTitle", event.target.value)}
-              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-            />
+            <span>Eyebrow</span>
+            <input value={form.about_eyebrow} onChange={(e) => setField("about_eyebrow", e.target.value)} className={inputClass} />
           </label>
           <label className="space-y-1 text-sm">
-            <span>Meta Description</span>
-            <textarea
-              value={settings.metaDescription}
-              onChange={(event) => setField("metaDescription", event.target.value)}
-              className="w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-              rows={3}
-            />
+            <span>Heading</span>
+            <input value={form.about_heading} onChange={(e) => setField("about_heading", e.target.value)} className={inputClass} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Body</span>
+            <textarea value={form.about_body} onChange={(e) => setField("about_body", e.target.value)} className={textareaClass} rows={5} />
           </label>
         </div>
       </section>
 
       <section className="card-luxury rounded-2xl p-5">
-        <p className="font-heading text-3xl">Homepage Settings</p>
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <p className="font-heading text-3xl">Contact Page</p>
+        <div className="mt-4 grid gap-4">
           <label className="space-y-1 text-sm">
-            <span>Homepage Hero Title</span>
-            <input
-              value={settings.homepageHeroTitle}
-              onChange={(event) => setField("homepageHeroTitle", event.target.value)}
-              className="min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
-            />
+            <span>Eyebrow</span>
+            <input value={form.contact_eyebrow} onChange={(e) => setField("contact_eyebrow", e.target.value)} className={inputClass} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Heading</span>
+            <input value={form.contact_heading} onChange={(e) => setField("contact_heading", e.target.value)} className={inputClass} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Body</span>
+            <textarea value={form.contact_body} onChange={(e) => setField("contact_body", e.target.value)} className={textareaClass} rows={4} />
+          </label>
+        </div>
+      </section>
+
+      <section className="card-luxury rounded-2xl p-5">
+        <p className="font-heading text-3xl">Catalogue</p>
+        <div className="mt-4 grid gap-4">
+          <label className="space-y-1 text-sm">
+            <span>Heading</span>
+            <input value={form.catalogue_heading} onChange={(e) => setField("catalogue_heading", e.target.value)} className={inputClass} />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span>Subheading</span>
+            <input value={form.catalogue_subheading} onChange={(e) => setField("catalogue_subheading", e.target.value)} className={inputClass} />
           </label>
         </div>
       </section>
@@ -148,13 +141,32 @@ export default function SettingsPage() {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="inline-flex min-h-11 items-center rounded-xl bg-[var(--brand-gold)] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)]"
+          disabled={updateSettings.isPending}
+          className="inline-flex min-h-11 items-center rounded-xl bg-[var(--brand-gold)] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(176,139,70,0.24)] hover:bg-[var(--brand-gold-deep)] disabled:opacity-60"
         >
-          Save Settings
+          {updateSettings.isPending ? "Saving..." : "Save Settings"}
         </button>
       </div>
 
       <ToastNotification items={toasts} onDismiss={removeToast} />
     </form>
   );
+}
+
+export default function SettingsPage() {
+  const settingsQuery = useSiteSettings();
+
+  if (settingsQuery.isLoading || !settingsQuery.data) {
+    return (
+      <PageLoader label="Loading settings">
+        <div className="space-y-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Shimmer key={index} className="card-luxury h-52 rounded-2xl" />
+          ))}
+        </div>
+      </PageLoader>
+    );
+  }
+
+  return <SettingsForm key={settingsQuery.data.updated_at} initial={settingsQuery.data} />;
 }

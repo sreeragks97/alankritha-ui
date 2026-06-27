@@ -4,6 +4,7 @@ import { BannerService } from "@/src/services/BannerService";
 import { CategoryService } from "@/src/services/CategoryService";
 import { LeadService } from "@/src/services/LeadService";
 import { ProductService } from "@/src/services/ProductService";
+import { SiteSettingsService } from "@/src/services/SiteSettingsService";
 
 export async function getServerServices() {
   const client = await getSupabaseServerClient();
@@ -14,5 +15,6 @@ export async function getServerServices() {
     categoryService: CategoryService.fromClient(client),
     bannerService: BannerService.fromClient(client),
     leadService: LeadService.fromClient(client),
+    siteSettingsService: SiteSettingsService.fromClient(client),
   };
 }

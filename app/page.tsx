@@ -23,11 +23,12 @@ function firstOf(value: string | string[] | undefined): string | undefined {
 
 export default async function Home({ searchParams }: HomePageProps) {
   const query = await searchParams;
-  const { categoryService, productService } = await getServerServices();
+  const { categoryService, productService, siteSettingsService } = await getServerServices();
 
-  const [categoryRows, productRows] = await Promise.all([
+  const [categoryRows, productRows, settings] = await Promise.all([
     categoryService.getCategories({ activeOnly: true }),
     productService.getProducts({ page: 1, limit: 100, activeOnly: true }),
+    siteSettingsService.getSettings(),
   ]);
 
   const categories = categoryRows.map(mapCategoryToUiCategory);
@@ -51,8 +52,8 @@ export default async function Home({ searchParams }: HomePageProps) {
   return (
     <div className="container-shell py-8 sm:py-10 md:py-12">
       <SectionHeader
-        title="Jewellery Catalogue"
-        subtitle="Browse our collection with filters by category, metal, occasion, and price."
+        title={settings.catalogue_heading ?? "Jewellery Catalogue"}
+        subtitle={settings.catalogue_subheading ?? undefined}
       />
       <div className="grid gap-6 lg:grid-cols-[280px_1fr] lg:gap-8">
         <FilterSidebar categories={categories} products={products} />
