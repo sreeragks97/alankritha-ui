@@ -8,16 +8,27 @@ import type { Category, Product } from "@/types/product";
 import { SORT_OPTIONS } from "@/lib/constants";
 import { useMounted, useScrollLock } from "@/hooks/useScrollLock";
 
+export interface FilterConfig {
+  search: boolean;
+  sort: boolean;
+  category: boolean;
+  price: boolean;
+  metal: boolean;
+  occasion: boolean;
+  tag: boolean;
+}
+
 interface FilterSidebarProps {
   categories: Category[];
   products: Product[];
+  config: FilterConfig;
 }
 
 function uniqueTags(products: Product[]): string[] {
   return Array.from(new Set(products.flatMap((product) => product.tags))).sort((a, b) => a.localeCompare(b));
 }
 
-export function FilterSidebar({ categories, products }: FilterSidebarProps) {
+export function FilterSidebar({ categories, products, config }: FilterSidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -79,105 +90,7 @@ export function FilterSidebar({ categories, products }: FilterSidebarProps) {
 
   const controls = (
     <div className="space-y-4">
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Product Search</label>
-        <input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by name or code"
-          className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm outline-none focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-        />
-      </div>
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Sort</label>
-        <select
-          value={sort}
-          onChange={(event) => setSort(event.target.value)}
-          className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-        >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Category</label>
-        <select
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
-          className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-        >
-          <option value="all">All Categories</option>
-          {categories.map((item) => (
-            <option key={item.id} value={item.slug}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Min Price</label>
-          <input
-            value={priceMin}
-            onChange={(event) => setPriceMin(event.target.value)}
-            type="number"
-            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Max Price</label>
-          <input
-            value={priceMax}
-            onChange={(event) => setPriceMax(event.target.value)}
-            type="number"
-            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-          />
-        </div>
-      </div>
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Metal</label>
-        <select
-          value={metalType}
-          onChange={(event) => setMetalType(event.target.value)}
-          className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-        >
-          <option value="all">All</option>
-          <option value="gold">Gold</option>
-          <option value="silver">Silver</option>
-        </select>
-      </div>
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Occasion</label>
-        <select
-          value={occasion}
-          onChange={(event) => setOccasion(event.target.value)}
-          className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-        >
-          <option value="all">All</option>
-          <option value="bridal">Bridal</option>
-          <option value="festive">Festive</option>
-          <option value="daily">Daily</option>
-        </select>
-      </div>
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Tag</label>
-        <select
-          value={tag}
-          onChange={(event) => setTag(event.target.value)}
-          className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
-        >
-          <option value="">Any</option>
-          {tags.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="flex gap-2 pt-2">
+      <div className="flex gap-2 pb-2">
         <button
           type="button"
           onClick={applyFilters}
@@ -193,6 +106,118 @@ export function FilterSidebar({ categories, products }: FilterSidebarProps) {
           Reset
         </button>
       </div>
+      {config.search ? (
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Product Search</label>
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search by name or code"
+            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm outline-none focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+          />
+        </div>
+      ) : null}
+      {config.sort ? (
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Sort</label>
+          <select
+            value={sort}
+            onChange={(event) => setSort(event.target.value)}
+            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+      {config.category ? (
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Category</label>
+          <select
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+          >
+            <option value="all">All Categories</option>
+            {categories.map((item) => (
+              <option key={item.id} value={item.slug}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+      {config.price ? (
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Min Price</label>
+            <input
+              value={priceMin}
+              onChange={(event) => setPriceMin(event.target.value)}
+              type="number"
+              className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Max Price</label>
+            <input
+              value={priceMax}
+              onChange={(event) => setPriceMax(event.target.value)}
+              type="number"
+              className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+            />
+          </div>
+        </div>
+      ) : null}
+      {config.metal ? (
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Metal</label>
+          <select
+            value={metalType}
+            onChange={(event) => setMetalType(event.target.value)}
+            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+          >
+            <option value="all">All</option>
+            <option value="gold">Gold</option>
+            <option value="silver">Silver</option>
+          </select>
+        </div>
+      ) : null}
+      {config.occasion ? (
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Occasion</label>
+          <select
+            value={occasion}
+            onChange={(event) => setOccasion(event.target.value)}
+            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+          >
+            <option value="all">All</option>
+            <option value="bridal">Bridal</option>
+            <option value="festive">Festive</option>
+            <option value="daily">Daily</option>
+          </select>
+        </div>
+      ) : null}
+      {config.tag ? (
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-[var(--brand-muted)]">Tag</label>
+          <select
+            value={tag}
+            onChange={(event) => setTag(event.target.value)}
+            className="h-11 w-full rounded-xl border border-[#dbcdb1] bg-white px-3 text-sm focus:border-[#b79a64] focus:ring-2 focus:ring-[#e4d1a9]"
+          >
+            <option value="">Any</option>
+            {tags.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
     </div>
   );
 

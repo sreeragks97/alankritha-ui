@@ -32,19 +32,31 @@ export default async function Home({ searchParams }: HomePageProps) {
   ]);
 
   const categories = categoryRows.map(mapCategoryToUiCategory);
-  const products = productRows.items.map(mapProductToUiProduct);
+  const products = productRows.items.map((item) =>
+    mapProductToUiProduct(item, { offerBadgeFallback: settings.offer_badge_label }),
+  );
 
-  const filters: CatalogFilters = {
-    category: firstOf(query.category) ?? "all",
-    search: firstOf(query.search),
-    metalType: firstOf(query.metal),
-    occasion: firstOf(query.occasion),
-    minPrice: firstOf(query.minPrice) ? Number(firstOf(query.minPrice)) : undefined,
-    maxPrice: firstOf(query.maxPrice) ? Number(firstOf(query.maxPrice)) : undefined,
-    tags: firstOf(query.tag) ? [String(firstOf(query.tag))] : undefined,
+  const config = {
+    search: settings.filter_search_enabled,
+    sort: settings.filter_sort_enabled,
+    category: settings.filter_category_enabled,
+    price: settings.filter_price_enabled,
+    metal: settings.filter_metal_enabled,
+    occasion: settings.filter_occasion_enabled,
+    tag: settings.filter_tag_enabled,
   };
 
-  const sort = (firstOf(query.sort) as SortOption) ?? "featured";
+  const filters: CatalogFilters = {
+    category: config.category ? firstOf(query.category) ?? "all" : "all",
+    search: config.search ? firstOf(query.search) : undefined,
+    metalType: config.metal ? firstOf(query.metal) : undefined,
+    occasion: config.occasion ? firstOf(query.occasion) : undefined,
+    minPrice: config.price && firstOf(query.minPrice) ? Number(firstOf(query.minPrice)) : undefined,
+    maxPrice: config.price && firstOf(query.maxPrice) ? Number(firstOf(query.maxPrice)) : undefined,
+    tags: config.tag && firstOf(query.tag) ? [String(firstOf(query.tag))] : undefined,
+  };
+
+  const sort = config.sort ? (firstOf(query.sort) as SortOption) ?? "featured" : "featured";
   const page = Number(firstOf(query.page) ?? "1");
   const filtered = composeCatalog(products, filters, sort);
   const result = paginate(filtered, page, PAGE_SIZE);
@@ -56,7 +68,7 @@ export default async function Home({ searchParams }: HomePageProps) {
         subtitle={settings.catalogue_subheading ?? undefined}
       />
       <div className="grid gap-6 lg:grid-cols-[280px_1fr] lg:gap-8">
-        <FilterSidebar categories={categories} products={products} />
+        <FilterSidebar categories={categories} products={products} config={config} />
         <div>
           {result.items.length ? (
             <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">

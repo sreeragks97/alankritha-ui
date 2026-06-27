@@ -5,6 +5,7 @@ interface WhatsAppOptions {
   productName: string;
   productCode: string;
   price: number;
+  offerPrice?: number | null;
   productLink: string;
   phone?: string;
 }
@@ -14,6 +15,7 @@ interface LeadRedirectOptions {
   productName: string;
   productCode: string;
   price: number;
+  offerPrice?: number | null;
   productSlug: string;
   source?: string;
   phone?: string;
@@ -22,7 +24,12 @@ interface LeadRedirectOptions {
 export { formatCurrency };
 
 export function generateWhatsAppMessage(options: WhatsAppOptions): string {
-  return `Hi, I am interested in:\n\nProduct: ${options.productName}\nCode: ${options.productCode}\nPrice: ${formatCurrency(options.price)}\n\nProduct Link: ${options.productLink}`;
+  const onOffer = typeof options.offerPrice === "number";
+  const priceLine = onOffer
+    ? `Price: ${formatCurrency(options.offerPrice as number)} (was ${formatCurrency(options.price)})`
+    : `Price: ${formatCurrency(options.price)}`;
+
+  return `Hi, I am interested in:\n\nProduct: ${options.productName}\nCode: ${options.productCode}\n${priceLine}\n\nProduct Link: ${options.productLink}`;
 }
 
 export function generateWhatsAppUrl(options: WhatsAppOptions): string {
@@ -39,6 +46,10 @@ export function generateLeadRedirectUrl(options: LeadRedirectOptions): string {
   params.set("productCode", options.productCode);
   params.set("price", String(options.price));
   params.set("productSlug", options.productSlug);
+
+  if (typeof options.offerPrice === "number") {
+    params.set("offerPrice", String(options.offerPrice));
+  }
 
   if (options.source) {
     params.set("source", options.source);

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { OptimizedImage } from "@/components/ui/image";
-import { formatCurrency, generateLeadRedirectUrl } from "@/lib/whatsapp";
+import { PriceTag } from "@/components/catalog/PriceTag";
+import { generateLeadRedirectUrl } from "@/lib/whatsapp";
 import type { Product } from "@/types/product";
 
 interface ProductCardProps {
@@ -13,6 +14,7 @@ export function ProductCard({ product }: ProductCardProps) {
     productName: product.name,
     productCode: product.code,
     price: product.price,
+    offerPrice: product.offerPrice,
     productSlug: product.slug,
     source: "product-card",
   });
@@ -20,6 +22,11 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <article className="card-luxury group flex h-full flex-col overflow-hidden border-[color:color-mix(in_srgb,var(--brand-gold)_24%,#fff_76%)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)]">
       <div className="relative overflow-hidden">
+        {product.offerLabel ? (
+          <span className="absolute left-2 top-2 z-20 rounded-full bg-[var(--brand-gold)] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_6px_14px_rgba(176,139,70,0.35)]">
+            {product.offerLabel}
+          </span>
+        ) : null}
         <div className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_top,rgba(22,18,12,0.16),rgba(22,18,12,0.02))] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <div className="relative aspect-[4/5] w-full">
           <OptimizedImage
@@ -37,7 +44,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <h3 className="line-clamp-2 font-heading text-[clamp(1rem,3.7vw,1.28rem)] leading-tight text-[#2f281d]">{product.name}</h3>
           <p className="text-xs uppercase tracking-[0.14em] text-[var(--brand-muted)]">Code: {product.code}</p>
         </div>
-        <p className="text-base font-semibold text-[var(--brand-gold-deep)] sm:text-lg">{formatCurrency(product.price)}</p>
+        <PriceTag price={product.price} offerPrice={product.offerPrice} size="sm" />
         <div className="mt-auto grid gap-2">
           <Link
             href={`/product/${product.slug}`}

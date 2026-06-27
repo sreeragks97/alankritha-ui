@@ -22,16 +22,18 @@ export function mapBannerToUiBanner(banner: Banner): UiBanner {
   };
 }
 
-export function mapProductToUiProduct(product: ProductWithRelations): UiProduct {
+interface MapProductOptions {
+  offerBadgeFallback?: string | null;
+}
+
+export function mapProductToUiProduct(product: ProductWithRelations, options?: MapProductOptions): UiProduct {
   const sortedImages = [...product.images].sort((a, b) => a.sort_order - b.sort_order);
   const imageUrls = sortedImages.map((item) => item.image_url);
   const categorySlug = product.category?.slug ?? "uncategorized";
 
-  console.info("[ProductImageDebug] Mapped product images for UI", {
-    productId: product.id,
-    imageCount: imageUrls.length,
-    imageUrls,
-  });
+  const price = Number(product.price);
+  const offer = product.offer_price != null ? Number(product.offer_price) : null;
+  const onOffer = offer != null && offer > 0 && offer < price;
 
   return {
     id: product.id,
@@ -39,7 +41,11 @@ export function mapProductToUiProduct(product: ProductWithRelations): UiProduct 
     name: product.name,
     code: product.code,
     category: categorySlug,
-    price: Number(product.offer_price ?? product.price),
+    price,
+    offerPrice: onOffer ? offer : null,
+    offerLabel: onOffer
+      ? product.offer_label?.trim() || options?.offerBadgeFallback?.trim() || "Special Offer"
+      : null,
     images: imageUrls,
     description: product.description ?? "No description available.",
     tags: [],

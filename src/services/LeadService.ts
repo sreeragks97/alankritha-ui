@@ -24,7 +24,12 @@ export class LeadService {
   }
 
   buildWhatsAppMessage(product: ProductWithRelations, productLink: string): string {
-    return `Hi, I am interested in:\n\nProduct: ${product.name}\nCode: ${product.code}\nPrice: ₹${product.price}\n\nProduct Link: ${productLink}`;
+    const price = Number(product.price);
+    const offer = product.offer_price != null ? Number(product.offer_price) : null;
+    const onOffer = offer != null && offer > 0 && offer < price;
+    const priceLine = onOffer ? `Price: ₹${offer} (was ₹${price})` : `Price: ₹${price}`;
+
+    return `Hi, I am interested in:\n\nProduct: ${product.name}\nCode: ${product.code}\n${priceLine}\n\nProduct Link: ${productLink}`;
   }
 
   buildWhatsAppRedirect(phone: string, message: string): string {

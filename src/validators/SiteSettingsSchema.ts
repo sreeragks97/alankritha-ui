@@ -25,6 +25,14 @@ export const siteSettingsSchema = z.object({
   contact_address: optionalText,
   catalogue_heading: optionalText,
   catalogue_subheading: optionalText,
+  offer_badge_label: optionalText,
+  filter_search_enabled: z.boolean().optional(),
+  filter_sort_enabled: z.boolean().optional(),
+  filter_category_enabled: z.boolean().optional(),
+  filter_price_enabled: z.boolean().optional(),
+  filter_metal_enabled: z.boolean().optional(),
+  filter_occasion_enabled: z.boolean().optional(),
+  filter_tag_enabled: z.boolean().optional(),
 });
 
 export type SiteSettingsInput = z.infer<typeof siteSettingsSchema>;

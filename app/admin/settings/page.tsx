@@ -6,9 +6,41 @@ import { PageLoader, Shimmer } from "@/components/ui/loading";
 import { useToast } from "@/hooks/useToast";
 import { useSiteSettings, useUpdateSiteSettings } from "@/src/hooks/useSiteSettings";
 import type { SiteSettings } from "@/src/types/database";
-import type { SiteSettingsInput } from "@/src/validators/SiteSettingsSchema";
 
-type FormState = Record<keyof SiteSettingsInput, string>;
+interface FormState {
+  whatsapp_number: string;
+  facebook_url: string;
+  instagram_url: string;
+  email: string;
+  about_eyebrow: string;
+  about_heading: string;
+  about_body: string;
+  contact_eyebrow: string;
+  contact_heading: string;
+  contact_body: string;
+  contact_phone: string;
+  contact_address: string;
+  catalogue_heading: string;
+  catalogue_subheading: string;
+  offer_badge_label: string;
+  filter_search_enabled: boolean;
+  filter_sort_enabled: boolean;
+  filter_category_enabled: boolean;
+  filter_price_enabled: boolean;
+  filter_metal_enabled: boolean;
+  filter_occasion_enabled: boolean;
+  filter_tag_enabled: boolean;
+}
+
+const FILTER_TOGGLES: Array<{ key: keyof FormState; label: string }> = [
+  { key: "filter_search_enabled", label: "Search" },
+  { key: "filter_sort_enabled", label: "Sort" },
+  { key: "filter_category_enabled", label: "Category" },
+  { key: "filter_price_enabled", label: "Price range" },
+  { key: "filter_metal_enabled", label: "Metal" },
+  { key: "filter_occasion_enabled", label: "Occasion" },
+  { key: "filter_tag_enabled", label: "Tag" },
+];
 
 const inputClass =
   "min-h-11 w-full rounded-lg border border-[#e8dcc3] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]";
@@ -30,6 +62,14 @@ function toForm(settings: SiteSettings): FormState {
     contact_address: settings.contact_address ?? "",
     catalogue_heading: settings.catalogue_heading ?? "",
     catalogue_subheading: settings.catalogue_subheading ?? "",
+    offer_badge_label: settings.offer_badge_label ?? "",
+    filter_search_enabled: settings.filter_search_enabled,
+    filter_sort_enabled: settings.filter_sort_enabled,
+    filter_category_enabled: settings.filter_category_enabled,
+    filter_price_enabled: settings.filter_price_enabled,
+    filter_metal_enabled: settings.filter_metal_enabled,
+    filter_occasion_enabled: settings.filter_occasion_enabled,
+    filter_tag_enabled: settings.filter_tag_enabled,
   };
 }
 
@@ -38,7 +78,7 @@ function SettingsForm({ initial }: { initial: SiteSettings }) {
   const { toasts, showToast, removeToast } = useToast();
   const [form, setForm] = useState<FormState>(() => toForm(initial));
 
-  const setField = (key: keyof FormState, value: string) => {
+  const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -135,6 +175,29 @@ function SettingsForm({ initial }: { initial: SiteSettings }) {
             <span>Subheading</span>
             <input value={form.catalogue_subheading} onChange={(e) => setField("catalogue_subheading", e.target.value)} className={inputClass} />
           </label>
+          <label className="space-y-1 text-sm">
+            <span>Default Offer Badge Label</span>
+            <input value={form.offer_badge_label} onChange={(e) => setField("offer_badge_label", e.target.value)} className={inputClass} placeholder="Special Offer" />
+            <span className="block text-xs text-[var(--brand-muted)]">Used on discounted products that don&apos;t set their own offer label.</span>
+          </label>
+        </div>
+      </section>
+
+      <section className="card-luxury rounded-2xl p-5">
+        <p className="font-heading text-3xl">Catalogue Filters</p>
+        <p className="mt-1 text-sm text-[var(--brand-muted)]">Show or hide each filter control on the catalogue pages.</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {FILTER_TOGGLES.map((toggle) => (
+            <label key={toggle.key} className="flex items-center gap-3 rounded-lg border border-[#e8dcc3] px-3 py-2.5 text-sm">
+              <input
+                type="checkbox"
+                checked={Boolean(form[toggle.key])}
+                onChange={(e) => setField(toggle.key, e.target.checked)}
+                className="h-4 w-4 accent-[var(--brand-gold)]"
+              />
+              <span>{toggle.label}</span>
+            </label>
+          ))}
         </div>
       </section>
 

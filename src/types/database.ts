@@ -52,6 +52,7 @@ export interface Database {
           category_id: string;
           price: number;
           offer_price: number | null;
+          offer_label: string | null;
           featured: boolean;
           sold_out: boolean;
           active: boolean;
@@ -67,6 +68,7 @@ export interface Database {
           category_id: string;
           price: number;
           offer_price?: number | null;
+          offer_label?: string | null;
           featured?: boolean;
           sold_out?: boolean;
           active?: boolean;
@@ -82,6 +84,7 @@ export interface Database {
           category_id?: string;
           price?: number;
           offer_price?: number | null;
+          offer_label?: string | null;
           featured?: boolean;
           sold_out?: boolean;
           active?: boolean;
@@ -218,6 +221,14 @@ export interface Database {
           contact_address: string | null;
           catalogue_heading: string | null;
           catalogue_subheading: string | null;
+          offer_badge_label: string | null;
+          filter_search_enabled: boolean;
+          filter_sort_enabled: boolean;
+          filter_category_enabled: boolean;
+          filter_price_enabled: boolean;
+          filter_metal_enabled: boolean;
+          filter_occasion_enabled: boolean;
+          filter_tag_enabled: boolean;
           updated_at: string;
         };
         Insert: {
@@ -236,6 +247,14 @@ export interface Database {
           contact_address?: string | null;
           catalogue_heading?: string | null;
           catalogue_subheading?: string | null;
+          offer_badge_label?: string | null;
+          filter_search_enabled?: boolean;
+          filter_sort_enabled?: boolean;
+          filter_category_enabled?: boolean;
+          filter_price_enabled?: boolean;
+          filter_metal_enabled?: boolean;
+          filter_occasion_enabled?: boolean;
+          filter_tag_enabled?: boolean;
           updated_at?: string;
         };
         Update: {
@@ -254,6 +273,14 @@ export interface Database {
           contact_address?: string | null;
           catalogue_heading?: string | null;
           catalogue_subheading?: string | null;
+          offer_badge_label?: string | null;
+          filter_search_enabled?: boolean;
+          filter_sort_enabled?: boolean;
+          filter_category_enabled?: boolean;
+          filter_price_enabled?: boolean;
+          filter_metal_enabled?: boolean;
+          filter_occasion_enabled?: boolean;
+          filter_tag_enabled?: boolean;
           updated_at?: string;
         };
         Relationships: [];

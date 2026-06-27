@@ -20,6 +20,7 @@ export const productSchema = z.object({
   category_id: z.string().uuid("Category is required"),
   price: z.number().min(0, "Price must be zero or more"),
   offer_price: z.number().min(0).nullable().optional(),
+  offer_label: z.string().trim().nullable().optional(),
   featured: z.boolean().default(false),
   sold_out: z.boolean().default(false),
   active: z.boolean().default(true),

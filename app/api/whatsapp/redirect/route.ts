@@ -23,10 +23,14 @@ function buildFallbackRedirect(request: NextRequest) {
   const productSlug = safeSlug(searchParams.get("productSlug"));
   const productLink = `${request.nextUrl.origin}/product/${productSlug}`;
 
+  const offerPriceRaw = searchParams.get("offerPrice");
+  const offerPrice = offerPriceRaw != null ? parsePrice(offerPriceRaw) : null;
+
   return generateWhatsAppUrl({
     productName,
     productCode,
     price: parsePrice(searchParams.get("price")),
+    offerPrice: offerPrice && offerPrice > 0 ? offerPrice : null,
     productLink,
     phone: searchParams.get("phone")?.trim() || BRAND.whatsappNumber,
   });

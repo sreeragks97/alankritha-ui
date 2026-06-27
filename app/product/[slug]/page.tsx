@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/catalog/ProductCard";
+import { PriceTag } from "@/components/catalog/PriceTag";
 import { SectionHeader } from "@/components/common/SectionHeader";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { formatCurrency, generateLeadRedirectUrl } from "@/lib/whatsapp";
@@ -17,14 +18,18 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
 
-  const { productService } = await getServerServices();
-  const productRow = await productService.getProductBySlug(slug);
+  const { productService, siteSettingsService } = await getServerServices();
+  const [productRow, settings] = await Promise.all([
+    productService.getProductBySlug(slug),
+    siteSettingsService.getSettings(),
+  ]);
 
   if (!productRow) {
     notFound();
   }
 
-  const product = mapProductToUiProduct(productRow);
+  const offerBadgeFallback = settings.offer_badge_label;
+  const product = mapProductToUiProduct(productRow, { offerBadgeFallback });
   const productLink = `${protocol}://${host}/product/${product.slug}`;
 
   const relatedRows = productRow.category?.slug
@@ -34,13 +39,14 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const related = relatedRows.items
     .filter((item) => item.id !== productRow.id)
     .slice(0, 4)
-    .map(mapProductToUiProduct);
+    .map((item) => mapProductToUiProduct(item, { offerBadgeFallback }));
 
   const whatsappHref = generateLeadRedirectUrl({
     productId: product.id,
     productName: product.name,
     productCode: product.code,
     price: product.price,
+    offerPrice: product.offerPrice,
     productSlug: product.slug,
     source: "product-detail",
   });
@@ -52,12 +58,19 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
 
         <div className="card-luxury h-fit space-y-5 p-5 sm:p-7 md:p-8">
           <div>
-            <span className="eyebrow-chip">{product.category.replace("-", " ")}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="eyebrow-chip">{product.category.replace("-", " ")}</span>
+              {product.offerLabel ? (
+                <span className="rounded-full bg-[var(--brand-gold)] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-white">
+                  {product.offerLabel}
+                </span>
+              ) : null}
+            </div>
             <h1 className="mt-3 font-heading text-[clamp(1.65rem,6.4vw,2.25rem)] leading-tight">{product.name}</h1>
             <p className="mt-2 text-sm text-[var(--brand-muted)]">Code: {product.code}</p>
           </div>
 
-          <p className="text-[clamp(1.5rem,6vw,1.9rem)] font-semibold text-[var(--brand-gold-deep)]">{formatCurrency(product.price)}</p>
+          <PriceTag price={product.price} offerPrice={product.offerPrice} size="lg" />
 
           <p className="text-sm leading-6 text-[var(--brand-muted)] sm:leading-7">{product.description}</p>
 
@@ -86,7 +99,10 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
             <br />
             Code: {product.code}
             <br />
-            Price: {formatCurrency(product.price)}
+            Price:{" "}
+            {product.offerPrice != null
+              ? `${formatCurrency(product.offerPrice)} (was ${formatCurrency(product.price)})`
+              : formatCurrency(product.price)}
             <br />
             <br />
             Product Link: {productLink}

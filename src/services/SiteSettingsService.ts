@@ -27,6 +27,14 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   contact_address: null,
   catalogue_heading: "Jewellery Catalogue",
   catalogue_subheading: "Browse our collection with filters by category, metal, occasion, and price.",
+  offer_badge_label: "Special Offer",
+  filter_search_enabled: true,
+  filter_sort_enabled: true,
+  filter_category_enabled: true,
+  filter_price_enabled: true,
+  filter_metal_enabled: true,
+  filter_occasion_enabled: true,
+  filter_tag_enabled: true,
   updated_at: new Date(0).toISOString(),
 };
 

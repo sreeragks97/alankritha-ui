@@ -13,6 +13,7 @@ export interface AdminProduct {
   categoryName: string;
   price: number;
   offerPrice?: number;
+  offerLabel?: string;
   tags: string[];
   images: string[];
   status: ProductStatus;

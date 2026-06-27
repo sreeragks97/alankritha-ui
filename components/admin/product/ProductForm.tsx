@@ -26,6 +26,7 @@ function newDraft(categoryId: string, categoryName: string): AdminProduct {
     categoryName,
     price: 0,
     offerPrice: 0,
+    offerLabel: "",
     tags: [],
     images: [],
     status: "draft",
@@ -195,6 +196,18 @@ export function ProductForm({ mode, categories, initialProduct, onSubmit, onCanc
               onChange={(event) => setField("offerPrice", Number(event.target.value))}
               className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
             />
+          </label>
+          <label className="space-y-2 text-sm md:col-span-2">
+            <span>Offer Label</span>
+            <input
+              value={form.offerLabel ?? ""}
+              onChange={(event) => setField("offerLabel", event.target.value)}
+              placeholder="Onam Special (optional)"
+              className="w-full rounded-xl border border-[#e6d8bc] px-3 py-2 focus:border-[#cfb27d] focus:ring-2 focus:ring-[#ead9b5]"
+            />
+            <span className="text-xs text-[var(--brand-muted)]">
+              Shown as a badge only when an offer price below the price is set. Leave blank to use the default from Settings.
+            </span>
           </label>
         </div>
       </section>
