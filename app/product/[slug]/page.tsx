@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { SectionHeader } from "@/components/common/SectionHeader";
@@ -12,6 +13,10 @@ interface ProductPageProps {
 
 export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const { slug } = await params;
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
+
   const { productService } = await getServerServices();
   const productRow = await productService.getProductBySlug(slug);
 
@@ -20,6 +25,7 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
   }
 
   const product = mapProductToUiProduct(productRow);
+  const productLink = `${protocol}://${host}/product/${product.slug}`;
 
   const relatedRows = productRow.category?.slug
     ? await productService.getProductsByCategory(productRow.category.slug, 1, 20)
@@ -83,7 +89,7 @@ export default async function ProductDetailsPage({ params }: ProductPageProps) {
             Price: {formatCurrency(product.price)}
             <br />
             <br />
-            Product Link: https://example.com/product/{product.slug}
+            Product Link: {productLink}
           </div>
         </div>
       </div>

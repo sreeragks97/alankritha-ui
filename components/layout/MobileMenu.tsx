@@ -73,7 +73,7 @@ export function MobileMenu() {
               <nav className="flex flex-col gap-1.5" aria-label="Mobile navigation">
                 <Link
                   className="touch-target inline-flex min-h-11 items-center rounded-xl px-3 py-2.5 text-[0.96rem] text-[#4d412f] hover:bg-[#f5efdf]"
-                  href="/category/bangles"
+                  href="/"
                   onClick={() => setOpen(false)}
                 >
                   Catalogue

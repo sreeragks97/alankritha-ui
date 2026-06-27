@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { BRAND } from "@/lib/constants";
-import { SearchBar } from "@/components/common/SearchBar";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 
 export function Navbar() {
@@ -11,14 +9,14 @@ export function Navbar() {
           <MobileMenu />
 
           <Link
-            href="/category/bangles"
+            href="/"
             className="min-w-0 truncate font-heading text-[clamp(1.1rem,5.2vw,1.55rem)] tracking-[0.07em] text-[var(--brand-ink)] sm:tracking-[0.09em]"
           >
             ALANKRITHA
           </Link>
 
           <nav className="ml-3 hidden items-center gap-5 text-sm text-[#5f5340] lg:flex">
-            <Link className="gold-link" href="/category/bangles">
+            <Link className="gold-link" href="/">
               Catalogue
             </Link>
             <Link className="gold-link" href="/about">
@@ -29,40 +27,9 @@ export function Navbar() {
             </Link>
           </nav>
 
-          <form action="/category/bangles" className="hidden flex-1 md:block md:pl-2 lg:pl-5">
-            <SearchBar className="w-full" />
-          </form>
-
-          <div className="ml-auto md:hidden">
-            <a
-              href={`https://wa.me/${BRAND.whatsappNumber}`}
-              target="_blank"
-              rel="noreferrer"
-              className="touch-target inline-flex items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--brand-gold)_42%,#fff_58%)] bg-white/90 px-3 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--brand-gold-deep)] shadow-[0_8px_18px_rgba(35,29,22,0.08)]"
-              aria-label="Open WhatsApp chat"
-            >
-              WhatsApp
-            </a>
-          </div>
-
-          <div className="hidden items-center gap-2 md:flex lg:gap-3">
-            <a
-              href={`https://wa.me/${BRAND.whatsappNumber}`}
-              target="_blank"
-              rel="noreferrer"
-              className="touch-target inline-flex items-center rounded-full bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(176,139,70,0.3)] hover:-translate-y-0.5 hover:bg-[var(--brand-gold-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)] focus-visible:ring-offset-2"
-            >
-              WhatsApp
-            </a>
-          </div>
+          <div className="ml-auto" />
         </div>
 
-        <form action="/category/bangles" className="pb-2 md:hidden">
-          <SearchBar
-            className="w-full"
-            placeholder="Search by product name, code, or style"
-          />
-        </form>
       </div>
     </header>
   );

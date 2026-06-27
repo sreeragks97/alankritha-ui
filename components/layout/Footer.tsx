@@ -15,7 +15,7 @@ export function Footer() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-muted)]">Explore</p>
           <div className="mt-3 flex flex-col gap-2 text-sm">
-            <Link className="gold-link" href="/category/bangles">
+            <Link className="gold-link" href="/">
               Catalogue
             </Link>
           </div>
@@ -33,15 +33,7 @@ export function Footer() {
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-muted)]">Contact</p>
-          <a
-            className="mt-3 inline-flex min-h-11 items-center rounded-full bg-[var(--brand-gold)] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(176,139,70,0.28)] hover:bg-[var(--brand-gold-deep)]"
-            href={`https://wa.me/${BRAND.whatsappNumber}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Enquire on WhatsApp
-          </a>
-          <p className="mt-2 text-sm text-[var(--brand-muted)]">Instagram {BRAND.instagramHandle}</p>
+          <p className="mt-3 text-sm text-[var(--brand-muted)]">Instagram {BRAND.instagramHandle}</p>
         </div>
       </div>
     </footer>

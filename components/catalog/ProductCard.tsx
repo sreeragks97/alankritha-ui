@@ -31,9 +31,6 @@ export function ProductCard({ product }: ProductCardProps) {
             fallbackLabel={`${product.name} image unavailable`}
           />
         </div>
-        <span className="absolute left-2.5 top-2.5 z-20 rounded-full bg-[rgba(255,249,236,0.93)] px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.11em] text-[#705726] sm:left-3 sm:top-3 sm:text-[0.68rem]">
-          {product.metalType}
-        </span>
       </div>
       <div className="flex flex-1 flex-col gap-3 p-3 sm:p-4">
         <div className="space-y-1">
