@@ -59,7 +59,7 @@ export function MobileMenu() {
                   href="/"
                   onClick={() => setOpen(false)}
                 >
-                  Catalogue
+                  Home
                 </Link>
                 <Link className="touch-target inline-flex min-h-11 items-center rounded-xl px-3 py-2.5 text-[0.96rem] text-[#4d412f] hover:bg-[#f5efdf]" href="/about" onClick={() => setOpen(false)}>
                   About

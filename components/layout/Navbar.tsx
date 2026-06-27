@@ -17,7 +17,7 @@ export function Navbar() {
 
           <nav className="ml-3 hidden items-center gap-5 text-sm text-[#5f5340] lg:flex">
             <Link className="gold-link" href="/">
-              Catalogue
+              Home
             </Link>
             <Link className="gold-link" href="/about">
               About

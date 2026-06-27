@@ -16,7 +16,7 @@ export function Footer() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-muted)]">Explore</p>
           <div className="mt-3 flex flex-col gap-2 text-sm">
             <Link className="gold-link" href="/">
-              Catalogue
+              Home
             </Link>
           </div>
         </div>
