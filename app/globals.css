@@ -144,6 +144,13 @@ summary {
   min-width: var(--touch-target);
 }
 
+/* Hide the floating Enquire button while an overlay drawer (filters / mobile
+   menu) is open so it never overlaps the drawer's own actions. */
+body[data-overlay-open] .js-enquire-fab {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .gradient-text {
   background: linear-gradient(120deg, #6d5425, #bf9f58 45%, #7d642f 85%);
   -webkit-background-clip: text;

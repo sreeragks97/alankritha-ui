@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Category, Product } from "@/types/product";
 import { SORT_OPTIONS } from "@/lib/constants";
+import { useMounted, useScrollLock } from "@/hooks/useScrollLock";
 
 interface FilterSidebarProps {
   categories: Category[];
@@ -21,6 +23,8 @@ export function FilterSidebar({ categories, products }: FilterSidebarProps) {
   const searchParams = useSearchParams();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const mounted = useMounted();
+  useScrollLock(drawerOpen);
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
   const [category, setCategory] = useState(searchParams.get("category") ?? "all");
   const [metalType, setMetalType] = useState(searchParams.get("metal") ?? "all");
@@ -205,49 +209,54 @@ export function FilterSidebar({ categories, products }: FilterSidebarProps) {
         >
           Filters & Sort
         </button>
-        <AnimatePresence>
-          {drawerOpen ? (
-            <div className="fixed inset-0 z-50">
-              <motion.button
-                type="button"
-                className="absolute inset-0 bg-black/30"
-                onClick={() => setDrawerOpen(false)}
-                aria-label="Close filters"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={drawerTransition}
-              />
-              <motion.aside
-                id="catalog-filter-drawer"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Catalog filters"
-                className="absolute bottom-0 left-0 right-0 max-h-[88vh] overflow-y-auto rounded-t-3xl bg-[#fffdf9] p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]"
-                initial={{ y: 28, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 28, opacity: 0 }}
-                transition={drawerTransition}
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <p className="kicker">Refine</p>
-                    <p className="font-heading text-xl">Filters</p>
+        {mounted
+          ? createPortal(
+              <AnimatePresence>
+                {drawerOpen ? (
+                  <div className="fixed inset-0 z-50">
+                    <motion.button
+                      type="button"
+                      className="absolute inset-0 bg-black/30"
+                      onClick={() => setDrawerOpen(false)}
+                      aria-label="Close filters"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={drawerTransition}
+                    />
+                    <motion.aside
+                      id="catalog-filter-drawer"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-label="Catalog filters"
+                      className="absolute bottom-0 left-0 right-0 max-h-[88vh] overflow-y-auto rounded-t-3xl bg-[#fffdf9] pb-[max(1.25rem,env(safe-area-inset-bottom))]"
+                      initial={{ y: 28, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: 28, opacity: 0 }}
+                      transition={drawerTransition}
+                    >
+                      <div className="sticky top-0 z-10 flex items-center justify-between bg-[#fffdf9] px-5 pb-4 pt-5">
+                        <div>
+                          <p className="kicker">Refine</p>
+                          <p className="font-heading text-xl">Filters</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setDrawerOpen(false)}
+                          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#dbcdb1] text-lg text-[#5d4b2b]"
+                          aria-label="Close filters"
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <div className="px-5">{controls}</div>
+                    </motion.aside>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setDrawerOpen(false)}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#dbcdb1] text-lg text-[#5d4b2b]"
-                    aria-label="Close filters"
-                  >
-                    ×
-                  </button>
-                </div>
-                {controls}
-              </motion.aside>
-            </div>
-          ) : null}
-        </AnimatePresence>
+                ) : null}
+              </AnimatePresence>,
+              document.body,
+            )
+          : null}
       </div>
     </>
   );

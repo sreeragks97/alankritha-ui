@@ -1,40 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { BRAND } from "@/lib/constants";
+import { useMounted, useScrollLock } from "@/hooks/useScrollLock";
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const mounted = useMounted();
   const menuTransition = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
-  useEffect(() => {
-    if (!open) return;
+  useScrollLock(open);
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open]);
-
-  return (
-    <>
-      <button
-        type="button"
-        className="touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d7c9ab] bg-white/85 text-lg text-[#6c5631] shadow-[0_8px_18px_rgba(33,28,20,0.08)] md:hidden"
-        onClick={() => setOpen(true)}
-        aria-label="Open menu"
-        aria-expanded={open}
-        aria-controls="mobile-catalog-menu"
-      >
-        ☰
-      </button>
-
-      <AnimatePresence>
-        {open ? (
-          <div className="fixed inset-0 z-50 md:hidden">
+  const overlay = (
+    <AnimatePresence>
+      {open ? (
+        <div className="fixed inset-0 z-50 md:hidden">
             <motion.button
               type="button"
               className="absolute inset-0 bg-[rgba(29,26,22,0.34)] backdrop-blur-[2px]"
@@ -98,6 +81,22 @@ export function MobileMenu() {
           </div>
         ) : null}
       </AnimatePresence>
+  );
+
+  return (
+    <>
+      <button
+        type="button"
+        className="touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d7c9ab] bg-white/85 text-lg text-[#6c5631] shadow-[0_8px_18px_rgba(33,28,20,0.08)] md:hidden"
+        onClick={() => setOpen(true)}
+        aria-label="Open menu"
+        aria-expanded={open}
+        aria-controls="mobile-catalog-menu"
+      >
+        ☰
+      </button>
+
+      {mounted ? createPortal(overlay, document.body) : null}
     </>
   );
 }
